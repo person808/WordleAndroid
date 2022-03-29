@@ -1,8 +1,11 @@
 package com.kainalu.wordle.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
 import androidx.room.Room
 import com.kainalu.wordle.persistence.AppDatabase
+import com.kainalu.wordle.stats.Stats
+import com.kainalu.wordle.stats.statsDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,4 +26,8 @@ object PersistenceModule {
 
     @Provides
     fun provideGuessesDao(db: AppDatabase) = db.validGuessesDao()
+
+    @Provides
+    fun provideStatsDataStore(@ApplicationContext context: Context): DataStore<Stats> =
+        context.statsDataStore
 }

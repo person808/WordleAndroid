@@ -4,6 +4,7 @@ plugins {
     id 'com.google.devtools.ksp' version '1.6.10-1.0.2'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.protobuf' version '0.8.17'
 }
 
 android {
@@ -79,6 +80,8 @@ dependencies {
     implementation "androidx.room:room-ktx:$roomVersion"
     ksp("androidx.room:room-compiler:$roomVersion")
 
+    implementation "androidx.datastore:datastore:1.0.0"
+    implementation  "com.google.protobuf:protobuf-javalite:3.18.0"
     implementation "com.google.dagger:hilt-android:$daggerVersion"
     kapt "com.google.dagger:hilt-compiler:$daggerVersion"
 
@@ -90,4 +93,23 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.14.0'
+    }
+
+    // Generates the java Protobuf-lite code for the Protobufs in this project. See
+    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
+    // for more information.
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option 'lite'
+                }
+            }
+        }
+    }
 }

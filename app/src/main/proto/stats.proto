@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "com.kainalu.wordle.stats";
+option java_multiple_files = true;
+
+message Stats {
+  Date last_completed_game_date = 1;
+  int32 longest_win_streak = 2;
+  int32 current_win_streak = 3;
+  int32 wins = 4;
+  int32 games_played = 5;
+  map<int32, int32> guess_distribution = 6;
+}
+
+message Date {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+}

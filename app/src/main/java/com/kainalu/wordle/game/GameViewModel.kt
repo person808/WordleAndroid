@@ -3,6 +3,8 @@ package com.kainalu.wordle.game
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kainalu.wordle.game.words.WordsRepository
+import com.kainalu.wordle.stats.GameResult
+import com.kainalu.wordle.stats.ResultsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -14,11 +16,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-//    private val resultsRepository: ResultsRepository,
+    private val resultsRepository: ResultsRepository,
     private val wordsRepository: WordsRepository
 ) :
     ViewModel() {
@@ -32,8 +35,13 @@ class GameViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _gameState.update {
+                val date = LocalDate.now()
                 val newState =
-                    GameState.Active(answer = wordsRepository.getAnswer(), maxGuesses = MAX_GUESSES)
+                    GameState.Active(
+                        answer = wordsRepository.getAnswer(date.toEpochDay()),
+                        maxGuesses = MAX_GUESSES,
+                        date = date
+                    )
                 Timber.d("Loaded game: $newState")
                 newState
             }
@@ -84,7 +92,7 @@ class GameViewModel @Inject constructor(
                     return@update state
                 }
 
-                val (answer, guesses, maxGuesses, guessResults) = state
+                val (answer, guesses, maxGuesses, guessResults, date) = state
                 val newGuesses = updateLastGuess(guesses) { guess ->
                     checkGuess(guess, answer)
                 }
@@ -119,13 +127,14 @@ class GameViewModel @Inject constructor(
                     if (guess is SubmittedGuess && (guess.all { it is GuessResult.Correct } || newGuesses.size == maxGuesses)) {
                         val won = guess.all { it is GuessResult.Correct }
 
-//                        resultsRepository.saveGameResult(
-//                            GameResult(
-//                                numGuesses = newGuesses.size,
-//                                won = won
-//                            )
-//                        )
-//                        Timber.d("Stats: ${resultsRepository.getStatistics()}")
+                        resultsRepository.saveGameResult(
+                            GameResult(
+                                date = LocalDate.now(),
+                                numGuesses = newGuesses.size,
+                                won = won
+                            )
+                        )
+                        Timber.d("Stats: ${resultsRepository.getStats()}")
 
                         val event = Event.GameFinished(answer = answer, won = won)
                         Timber.d("Game finished: $event")
@@ -136,6 +145,7 @@ class GameViewModel @Inject constructor(
                             guesses = newGuesses,
                             maxGuesses = maxGuesses,
                             guessResults = newGuessResults,
+                            date = date
                         )
                     } else {
                         state.copy(guesses = newGuesses, guessResults = newGuessResults)

@@ -38,7 +38,7 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = viewMod
     ) {
         // Need to rebind state to let compiler smart cast state type
         state.let { state ->
-            if (state is ActiveGameData) {
+            if (state is GameData) {
                 GameBoard(
                     modifier = Modifier.padding(16.dp),
                     guesses = state.guesses,
