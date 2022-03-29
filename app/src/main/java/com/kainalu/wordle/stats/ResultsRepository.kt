@@ -27,10 +27,13 @@ class ResultsRepository @Inject constructor(private val statsDataStore: DataStor
                 longestWinStreak =
                     if (newWinStreak > longestWinStreak) newWinStreak else longestWinStreak
                 gamesPlayed += 1
-                putGuessDistribution(
-                    result.numGuesses,
-                    guessDistributionMap.getOrDefault(result.numGuesses, 0) + 1
-                )
+
+                if (result.won) {
+                    putGuessDistribution(
+                        result.numGuesses,
+                        guessDistributionMap.getOrDefault(result.numGuesses, 0) + 1
+                    )
+                }
             }.build()
         }
     }
