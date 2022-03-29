@@ -96,36 +96,32 @@ class GameViewModel @Inject constructor(
                 val newGuesses = updateLastGuess(guesses) { guess ->
                     checkGuess(guess, answer)
                 }
-                val newGuessResults = newGuesses.lastOrNull()?.let { guess ->
-                    if (guess is SubmittedGuess) {
-                        guessResults.toMutableMap().apply {
-                            // Loop over results of the submitted guess and update the best result per
-                            // character if needed
-                            guess.forEach { result ->
-                                when (result) {
-                                    is GuessResult.Correct -> set(result.letter, result)
-                                    is GuessResult.PartialMatch -> {
-                                        if (guessResults[result.letter] !is GuessResult.Correct) {
-                                            set(result.letter, result)
-                                        }
+                val newGuessResults = newGuesses.lastOrNull { it is SubmittedGuess }?.let { guess ->
+                    guessResults.toMutableMap().apply {
+                        // Loop over results of the submitted guess and update the best result per
+                        // character if needed
+                        (guess as SubmittedGuess).forEach { result ->
+                            when (result) {
+                                is GuessResult.Correct -> set(result.letter, result)
+                                is GuessResult.PartialMatch -> {
+                                    if (guessResults[result.letter] !is GuessResult.Correct) {
+                                        set(result.letter, result)
                                     }
-                                    is GuessResult.Incorrect -> {
-                                        if (guessResults[result.letter] == null) {
-                                            set(result.letter, result)
-                                        }
+                                }
+                                is GuessResult.Incorrect -> {
+                                    if (guessResults[result.letter] == null) {
+                                        set(result.letter, result)
                                     }
                                 }
                             }
                         }
-                    } else {
-                        guessResults
                     }
                 } ?: guessResults
 
-                newGuesses.lastOrNull()?.let { guess ->
-                    // Check if game is finished
-                    if (guess is SubmittedGuess && (guess.all { it is GuessResult.Correct } || newGuesses.size == maxGuesses)) {
-                        val won = guess.all { it is GuessResult.Correct }
+                // Get final submitted guess and process it if the game is over
+                newGuesses.lastOrNull { it is SubmittedGuess && (it.all { result -> result is GuessResult.Correct } || newGuesses.size == maxGuesses) }
+                    ?.let { guess ->
+                        val won = (guess as SubmittedGuess).all { it is GuessResult.Correct }
 
                         resultsRepository.saveGameResult(
                             GameResult(
@@ -147,10 +143,7 @@ class GameViewModel @Inject constructor(
                             guessResults = newGuessResults,
                             date = date
                         )
-                    } else {
-                        state.copy(guesses = newGuesses, guessResults = newGuessResults)
-                    }
-                } ?: state.copy(guesses = newGuesses, guessResults = newGuessResults)
+                    } ?: state.copy(guesses = newGuesses, guessResults = newGuessResults)
             }
         }
     }
