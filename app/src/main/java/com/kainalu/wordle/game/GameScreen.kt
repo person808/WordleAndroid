@@ -24,7 +24,8 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = viewMod
         viewModel.gameEvents.collect { event ->
             Timber.d("Received Event $event")
             when (event) {
-                is Event.InvalidGuess -> snackbarState.showSnackbar("Not in word list")
+                is Event.GuessNotInWordList -> snackbarState.showSnackbar("Not in word list")
+                is Event.GuessTooShort -> snackbarState.showSnackbar("Not enough letters")
                 is Event.GameFinished -> snackbarState.showSnackbar(if (event.won) "You win!" else event.answer.uppercase())
             }
         }

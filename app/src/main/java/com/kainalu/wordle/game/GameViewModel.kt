@@ -6,7 +6,6 @@ import com.kainalu.wordle.game.words.WordsRepository
 import com.kainalu.wordle.stats.GameResult
 import com.kainalu.wordle.stats.ResultsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -157,13 +155,12 @@ class GameViewModel @Inject constructor(
      */
     private suspend fun checkGuess(guess: UnsubmittedGuess, answer: String): Guess {
         if (!guess.isFull()) {
+            _gameEvents.send(Event.GuessTooShort)
             return guess
         } else if (!wordsRepository.getValidGuessesSet()
                 .contains(guess.joinToString(separator = ""))
         ) {
-            withContext(Dispatchers.Main) {
-                _gameEvents.send(Event.InvalidGuess)
-            }
+            _gameEvents.send(Event.GuessNotInWordList)
             return guess
         }
 
