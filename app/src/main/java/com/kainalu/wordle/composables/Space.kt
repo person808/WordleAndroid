@@ -22,7 +22,7 @@ private val SPACE_SIZE = 48.dp
 private val BORDER_WIDTH = 2.dp
 
 @Composable
-private fun SpaceBox(modifier: Modifier = Modifier, content: @Composable () -> Unit?) {
+private fun SpaceBox(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Box(modifier = modifier.size(SPACE_SIZE), contentAlignment = Alignment.Center) {
         content()
     }
