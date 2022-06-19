@@ -4,14 +4,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Backspace
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.isSpecified
+import androidx.compose.ui.graphics.isUnspecified
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -62,8 +68,8 @@ fun Keyboard(
                             result = guessResults[keybinding.char],
                             onClick = onClick
                         )
-                        is Key.Submit -> TextButton(text = "Submit", onClick = onClick)
-                        is Key.Delete -> TextButton(text = "Delete", onClick = onClick)
+                        is Key.Submit -> TextButton(modifier = Modifier.width(60.dp), text = "Submit", onClick = onClick)
+                        is Key.Delete -> IconButton(modifier = Modifier.width(60.dp), icon = Icons.Outlined.Backspace, onClick = onClick)
                     }
                 }
             }
@@ -79,6 +85,7 @@ private fun KeyboardButton(
     content: @Composable () -> Unit
 ) {
     Box(modifier = modifier
+        .height(40.dp)
         .clip(RoundedCornerShape(2.dp))
         .background(if (backgroundColor.isSpecified) backgroundColor else MaterialTheme.colors.keyboardButtonBackground)
         .clickable { onClick() }
@@ -122,11 +129,34 @@ private fun LetterButton(text: String, result: GuessResult?, onClick: () -> Unit
     }
 
     TextButton(
+        modifier = Modifier.width(28.dp),
         text = text,
         backgroundColor = backgroundColor,
         textColor = textColor,
         onClick = onClick
     )
+}
+
+@Composable
+private fun IconButton(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = Color.Unspecified,
+    icon: ImageVector,
+    iconTint: Color = Color.Unspecified,
+    onClick: () -> Unit = { },
+) {
+    KeyboardButton(
+        modifier.defaultMinSize(24.dp),
+        backgroundColor = backgroundColor,
+        onClick = onClick
+    ) {
+        Icon(
+            icon,
+            modifier = Modifier.fillMaxHeight(),
+            contentDescription = null,
+            tint = if (iconTint.isUnspecified) MaterialTheme.colors.onSurface else iconTint
+        )
+    }
 }
 
 private class SampleGuessResultProvider : PreviewParameterProvider<Map<Char, GuessResult>> {
