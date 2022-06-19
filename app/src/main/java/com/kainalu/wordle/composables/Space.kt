@@ -32,7 +32,7 @@ private fun SpaceBox(modifier: Modifier = Modifier, content: @Composable () -> U
 private fun SpaceLetter(letter: Char, color: Color) {
     Text(
         text = letter.uppercase(),
-        fontSize = 28.sp,
+        fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
         color = color
     )
@@ -52,7 +52,7 @@ fun EmptySpace() {
 @Composable
 fun IncorrectSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) {
     SpaceBox(modifier = Modifier.background(MaterialTheme.colors.incorrectGuess)) {
-        SpaceLetter(letter = letter, color = MaterialTheme.colors.onSubmittedGuess)
+        SpaceLetter(letter = letter, color = MaterialTheme.colors.submittedGuess)
     }
 }
 
@@ -60,7 +60,7 @@ fun IncorrectSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) 
 @Composable
 fun PartialMatchSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) {
     SpaceBox(modifier = Modifier.background(MaterialTheme.colors.partialMatch)) {
-        SpaceLetter(letter = letter, color = MaterialTheme.colors.onSubmittedGuess)
+        SpaceLetter(letter = letter, color = MaterialTheme.colors.submittedGuess)
     }
 }
 
@@ -68,7 +68,7 @@ fun PartialMatchSpace(@PreviewParameter(SampleLetterProvider::class) letter: Cha
 @Composable
 fun CorrectSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) {
     SpaceBox(modifier = Modifier.background(MaterialTheme.colors.correctGuess)) {
-        SpaceLetter(letter = letter, color = MaterialTheme.colors.onSubmittedGuess)
+        SpaceLetter(letter = letter, color = MaterialTheme.colors.submittedGuess)
     }
 }
 

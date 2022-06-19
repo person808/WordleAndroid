@@ -118,7 +118,7 @@ private fun LetterButton(text: String, result: GuessResult?, onClick: () -> Unit
     val textColor = if (result == null) {
         MaterialTheme.colors.onSurface
     } else {
-        MaterialTheme.colors.onSubmittedGuess
+        MaterialTheme.colors.submittedGuess
     }
 
     TextButton(
