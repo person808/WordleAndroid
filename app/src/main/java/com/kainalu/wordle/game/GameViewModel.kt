@@ -1,5 +1,6 @@
 package com.kainalu.wordle.game
 
+import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kainalu.wordle.game.words.WordsRepository
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,7 +60,7 @@ class GameViewModel @Inject constructor(
                     // We need to create a new guess to fill
                     state.copy(guesses = buildList {
                         addAll(guesses)
-                        add(UnsubmittedGuess(answer.length, letter.toString()))
+                        add(UnsubmittedGuess(answer.length, letter.toString().lowercase()))
                     })
                 } else {
                     state.copy(guesses = updateLastGuess(guesses) { guess ->
@@ -157,9 +159,9 @@ class GameViewModel @Inject constructor(
         if (!guess.isFull()) {
             _gameEvents.send(Event.GuessTooShort)
             return guess
-        } else if (!wordsRepository.getValidGuessesSet()
-                .contains(guess.joinToString(separator = ""))
-        ) {
+        }
+
+        if (!wordsRepository.getValidGuessesSet().contains(guess.joinToString(separator = ""))) {
             _gameEvents.send(Event.GuessNotInWordList)
             return guess
         }
@@ -175,17 +177,10 @@ class GameViewModel @Inject constructor(
         }
 
         // Check for partial matches next (right letter, wrong place)
-        answer.forEachIndexed outer@{ answerIndex, answerLetter ->
-            guess.forEachIndexed { index, letter ->
-                if (letter.equals(
-                        answerLetter,
-                        ignoreCase = true
-                    ) && results.getValue(answerIndex) is GuessResult.Incorrect
-                ) {
-                    results[index] = GuessResult.PartialMatch(letter)
-                    // Found a partial match, move on to checking next letter of the answer
-                    return@outer
-                }
+        val answerLetters = answer.lowercase().toSet();
+        guess.forEachIndexed { index, letter ->
+            if (answerLetters.contains(letter.lowercaseChar()) && results.getValue(index) is GuessResult.Incorrect) {
+                results[index] = GuessResult.PartialMatch(letter)
             }
         }
 
