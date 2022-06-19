@@ -2,6 +2,7 @@ package com.kainalu.wordle
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
@@ -35,7 +36,7 @@ fun App() {
 
     CompositionLocalProvider(LocalSnackbarHostState provides scaffoldState.snackbarHostState) {
         Scaffold(
-            modifier = Modifier.safeContentPadding(),
+            modifier = Modifier.safeDrawingPadding(),
             scaffoldState = scaffoldState,
             topBar = { AppBar() }
         ) { padding ->
