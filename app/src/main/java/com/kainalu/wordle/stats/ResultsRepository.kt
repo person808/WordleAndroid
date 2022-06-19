@@ -43,18 +43,14 @@ class ResultsRepository @Inject constructor(private val statsDataStore: DataStor
     }
 
     private fun calculateWinStreak(stats: Stats, result: GameResult): Int {
+        val playedPreviousDay = ChronoUnit.DAYS.between(
+            stats.lastCompletedGameDate.toLocalDate(),
+            result.date
+        ) > 1L
         return when {
-            // Check if we have a previously played game to calculate the winstreak with
-            result.won && stats.lastCompletedGameDate != Date.getDefaultInstance() -> {
-                val playedPreviousDay = ChronoUnit.DAYS.between(
-                    stats.lastCompletedGameDate.toLocalDate(),
-                    result.date
-                ) > 1L
-                if (playedPreviousDay) {
-                    stats.currentWinStreak + 1
-                } else {
-                    0
-                }
+            // Check if we have a winstreak to extend from the previous day
+            result.won && stats.lastCompletedGameDate != Date.getDefaultInstance() && playedPreviousDay -> {
+                stats.currentWinStreak + 1
             }
             // No previously played game so the player has won their first played game!
             result.won -> 1
