@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Help
+import androidx.compose.material.icons.outlined.Leaderboard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,13 +26,13 @@ fun AppBar(modifier: Modifier = Modifier) {
             actions = {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
-                        painterResource(id = R.drawable.ic_outline_help_outline_24),
+                        Icons.Outlined.Help,
                         contentDescription = null
                     )
                 }
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
-                        painterResource(id = R.drawable.ic_outline_leaderboard_24),
+                        Icons.Outlined.Leaderboard,
                         contentDescription = null
                     )
                 }
