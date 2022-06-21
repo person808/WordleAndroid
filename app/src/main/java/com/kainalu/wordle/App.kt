@@ -1,7 +1,6 @@
 package com.kainalu.wordle
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -14,9 +13,15 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kainalu.wordle.composables.AppBar
 import com.kainalu.wordle.game.GameScreen
+import com.kainalu.wordle.navigation.Screen
+import com.kainalu.wordle.stats.StatsScreen
 
 val LocalSnackbarHostState =
     compositionLocalOf<SnackbarHostState> { error("No SnackbarHostState provided") }
@@ -32,15 +37,23 @@ fun App() {
         systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
     }
 
+    val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
     CompositionLocalProvider(LocalSnackbarHostState provides scaffoldState.snackbarHostState) {
         Scaffold(
             modifier = Modifier.safeDrawingPadding(),
             scaffoldState = scaffoldState,
-            topBar = { AppBar() }
+            topBar = { AppBar(navController) }
         ) { padding ->
-            GameScreen(modifier = Modifier.padding(padding))
+            NavHost(
+                navController = navController,
+                startDestination = Screen.Game.route,
+                Modifier.padding(padding)
+            ) {
+                composable(Screen.Game.route) { GameScreen() }
+                dialog(Screen.Statistics.route) { StatsScreen(navController) }
+            }
         }
     }
 }

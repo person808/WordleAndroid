@@ -9,28 +9,28 @@ import androidx.compose.material.icons.outlined.Leaderboard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kainalu.wordle.R
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.kainalu.wordle.navigation.Screen
 
 
-@Preview(showBackground = true)
 @Composable
-fun AppBar(modifier: Modifier = Modifier) {
+fun AppBar(navController: NavController, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         TopAppBar(
             title = { Text("Wordle") },
             backgroundColor = Color.Transparent,
             elevation = 0.dp,
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { }) {
                     Icon(
                         Icons.Outlined.Help,
                         contentDescription = null
                     )
                 }
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { navController.navigate(Screen.Statistics.route) }) {
                     Icon(
                         Icons.Outlined.Leaderboard,
                         contentDescription = null
@@ -42,4 +42,10 @@ fun AppBar(modifier: Modifier = Modifier) {
             })
         Divider()
     }
+}
+
+@Preview
+@Composable
+private fun AppBarPreview() {
+    AppBar(rememberNavController())
 }

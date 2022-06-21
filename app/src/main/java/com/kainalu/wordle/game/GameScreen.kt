@@ -9,14 +9,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kainalu.wordle.LocalSnackbarHostState
 import com.kainalu.wordle.composables.*
 import timber.log.Timber
 
 @Preview(showBackground = true)
 @Composable
-fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = viewModel()) {
+fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltViewModel()) {
     val state by viewModel.gameState.collectAsState()
     val snackbarState = LocalSnackbarHostState.current
 
