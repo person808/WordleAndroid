@@ -7,7 +7,7 @@ interface GameData {
     val answer: String
     /** The guesses the player has made */
     val guesses: List<Guess>
-    /** The maximum number of guesses a player has to guess the answer */
+    /** @see [com.kainalu.wordle.settings.GameSettings.maxGuesses] */
     val maxGuesses: Int
     /** A map of guessed characters to the best [GuessResult] result for that letter */
     val guessResults: Map<Char, GuessResult>

@@ -1,9 +1,9 @@
 package com.kainalu.wordle.game
 
-import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kainalu.wordle.game.words.WordsRepository
+import com.kainalu.wordle.settings.GameSettings
 import com.kainalu.wordle.stats.GameResult
 import com.kainalu.wordle.stats.ResultsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,13 +16,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val resultsRepository: ResultsRepository,
-    private val wordsRepository: WordsRepository
+    private val wordsRepository: WordsRepository,
+    private val gameSettings: GameSettings,
 ) :
     ViewModel() {
 
@@ -39,7 +39,7 @@ class GameViewModel @Inject constructor(
                 val newState =
                     GameState.Active(
                         answer = wordsRepository.getAnswer(date.toEpochDay()),
-                        maxGuesses = MAX_GUESSES,
+                        maxGuesses = gameSettings.maxGuesses,
                         date = date
                     )
                 Timber.d("Loaded game: $newState")
@@ -208,9 +208,5 @@ class GameViewModel @Inject constructor(
                 guess
             }
         }
-    }
-
-    companion object {
-        private const val MAX_GUESSES = 6
     }
 }

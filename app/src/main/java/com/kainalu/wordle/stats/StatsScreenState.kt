@@ -6,6 +6,7 @@ sealed class StatsScreenState {
         val gamesPlayed: Int,
         val winRate: Double,
         val currentWinStreak: Int,
-        val maxWinStreak: Int
+        val maxWinStreak: Int,
+        val gameDistribution: Map<Int, Int>,
     ) : StatsScreenState()
 }

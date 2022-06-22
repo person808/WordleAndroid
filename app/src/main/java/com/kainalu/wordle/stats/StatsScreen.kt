@@ -62,6 +62,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
                     }
 
                     Text("Game Distribution", fontWeight = FontWeight.Bold)
+                    GameDistributionChart(s.gameDistribution)
                 }
             }
             else -> Unit
