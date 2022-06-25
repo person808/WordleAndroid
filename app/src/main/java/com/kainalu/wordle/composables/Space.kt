@@ -16,74 +16,70 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kainalu.wordle.ui.theme.*
+import com.kainalu.wordle.ui.theme.correctGuess
+import com.kainalu.wordle.ui.theme.emptySpaceBorder
+import com.kainalu.wordle.ui.theme.guessBorder
+import com.kainalu.wordle.ui.theme.incorrectGuess
+import com.kainalu.wordle.ui.theme.partialMatch
+import com.kainalu.wordle.ui.theme.submittedGuess
 
 private val SPACE_SIZE = 48.dp
 private val BORDER_WIDTH = 2.dp
 
 @Composable
 private fun SpaceBox(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-    Box(modifier = modifier.size(SPACE_SIZE), contentAlignment = Alignment.Center) {
-        content()
-    }
+  Box(modifier = modifier.size(SPACE_SIZE), contentAlignment = Alignment.Center) { content() }
 }
 
 @Composable
 private fun SpaceLetter(letter: Char, color: Color) {
-    Text(
-        text = letter.uppercase(),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        color = color
-    )
+  Text(text = letter.uppercase(), fontSize = 20.sp, fontWeight = FontWeight.Bold, color = color)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun EmptySpace() {
-    SpaceBox(
-        modifier = Modifier
-            .background(MaterialTheme.colors.surface)
-            .border(BORDER_WIDTH, MaterialTheme.colors.emptySpaceBorder)
-    ) {}
+  SpaceBox(
+      modifier =
+          Modifier.background(MaterialTheme.colors.surface)
+              .border(BORDER_WIDTH, MaterialTheme.colors.emptySpaceBorder)) {}
 }
 
 @Preview(showBackground = true)
 @Composable
 fun IncorrectSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) {
-    SpaceBox(modifier = Modifier.background(MaterialTheme.colors.incorrectGuess)) {
-        SpaceLetter(letter = letter, color = MaterialTheme.colors.submittedGuess)
-    }
+  SpaceBox(modifier = Modifier.background(MaterialTheme.colors.incorrectGuess)) {
+    SpaceLetter(letter = letter, color = MaterialTheme.colors.submittedGuess)
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PartialMatchSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) {
-    SpaceBox(modifier = Modifier.background(MaterialTheme.colors.partialMatch)) {
-        SpaceLetter(letter = letter, color = MaterialTheme.colors.submittedGuess)
-    }
+  SpaceBox(modifier = Modifier.background(MaterialTheme.colors.partialMatch)) {
+    SpaceLetter(letter = letter, color = MaterialTheme.colors.submittedGuess)
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CorrectSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) {
-    SpaceBox(modifier = Modifier.background(MaterialTheme.colors.correctGuess)) {
-        SpaceLetter(letter = letter, color = MaterialTheme.colors.submittedGuess)
-    }
+  SpaceBox(modifier = Modifier.background(MaterialTheme.colors.correctGuess)) {
+    SpaceLetter(letter = letter, color = MaterialTheme.colors.submittedGuess)
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GuessSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) {
-    SpaceBox(
-        modifier = Modifier
-            .background(MaterialTheme.colors.surface)
-            .border(BORDER_WIDTH, MaterialTheme.colors.guessBorder)
-    ) {
-        SpaceLetter(letter = letter, color = MaterialTheme.colors.onSurface)
-    }
+  SpaceBox(
+      modifier =
+          Modifier.background(MaterialTheme.colors.surface)
+              .border(BORDER_WIDTH, MaterialTheme.colors.guessBorder)) {
+    SpaceLetter(letter = letter, color = MaterialTheme.colors.onSurface)
+  }
 }
 
 class SampleLetterProvider : PreviewParameterProvider<Char> {
-    override val values = sequenceOf('a')
+  override val values = sequenceOf('a')
 }

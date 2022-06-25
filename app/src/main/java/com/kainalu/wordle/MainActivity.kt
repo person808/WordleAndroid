@@ -9,15 +9,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Turn off the decor fitting system windows, which means we need to fit it with insets
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    // Turn off the decor fitting system windows, which means we need to fit it with insets
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        setContent {
-            WordleTheme {
-                App()
-            }
-        }
-    }
+    setContent { WordleTheme { App() } }
+  }
 }

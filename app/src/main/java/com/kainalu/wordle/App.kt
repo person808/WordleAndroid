@@ -29,31 +29,27 @@ val LocalSnackbarHostState =
 @Preview
 @Composable
 fun App() {
-    // Update the system bars to be translucent
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = MaterialTheme.colors.isLight
+  // Update the system bars to be translucent
+  val systemUiController = rememberSystemUiController()
+  val useDarkIcons = MaterialTheme.colors.isLight
 
-    SideEffect {
-        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
+  SideEffect { systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons) }
+
+  val navController = rememberNavController()
+  val scaffoldState = rememberScaffoldState()
+
+  CompositionLocalProvider(LocalSnackbarHostState provides scaffoldState.snackbarHostState) {
+    Scaffold(
+        modifier = Modifier.safeDrawingPadding(),
+        scaffoldState = scaffoldState,
+        topBar = { AppBar(navController) }) { padding ->
+      NavHost(
+          navController = navController,
+          startDestination = Screen.Game.route,
+          Modifier.padding(padding)) {
+        composable(Screen.Game.route) { GameScreen() }
+        dialog(Screen.Statistics.route) { StatsScreen(navController) }
+      }
     }
-
-    val navController = rememberNavController()
-    val scaffoldState = rememberScaffoldState()
-
-    CompositionLocalProvider(LocalSnackbarHostState provides scaffoldState.snackbarHostState) {
-        Scaffold(
-            modifier = Modifier.safeDrawingPadding(),
-            scaffoldState = scaffoldState,
-            topBar = { AppBar(navController) }
-        ) { padding ->
-            NavHost(
-                navController = navController,
-                startDestination = Screen.Game.route,
-                Modifier.padding(padding)
-            ) {
-                composable(Screen.Game.route) { GameScreen() }
-                dialog(Screen.Statistics.route) { StatsScreen(navController) }
-            }
-        }
-    }
+  }
 }

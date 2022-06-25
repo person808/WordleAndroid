@@ -16,18 +16,17 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object PersistenceModule {
 
-    @Provides
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, "wordle.db")
-            .createFromAsset("wordle.db").build()
+  @Provides
+  fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
+      Room.databaseBuilder(context, AppDatabase::class.java, "wordle.db")
+          .createFromAsset("wordle.db")
+          .build()
 
-    @Provides
-    fun provideAnswersDao(db: AppDatabase) = db.validAnswersDao()
+  @Provides fun provideAnswersDao(db: AppDatabase) = db.validAnswersDao()
 
-    @Provides
-    fun provideGuessesDao(db: AppDatabase) = db.validGuessesDao()
+  @Provides fun provideGuessesDao(db: AppDatabase) = db.validGuessesDao()
 
-    @Provides
-    fun provideStatsDataStore(@ApplicationContext context: Context): DataStore<Stats> =
-        context.statsDataStore
+  @Provides
+  fun provideStatsDataStore(@ApplicationContext context: Context): DataStore<Stats> =
+      context.statsDataStore
 }

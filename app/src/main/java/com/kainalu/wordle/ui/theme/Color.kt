@@ -21,22 +21,22 @@ private val Gray6 = Color(0xFF878A8C)
 private val Gray7 = Color(0xFF565758)
 
 val Colors.correctGuess: Color
-    get() = if (isLight) Green else DarkGreen
+  get() = if (isLight) Green else DarkGreen
 
 val Colors.partialMatch: Color
-    get() = if (isLight) Yellow else DarkYellow
+  get() = if (isLight) Yellow else DarkYellow
 
 val Colors.incorrectGuess: Color
-    get() = if (isLight) Gray2 else Gray4
+  get() = if (isLight) Gray2 else Gray4
 
 val Colors.submittedGuess: Color
-    get() = Color.White
+  get() = Color.White
 
 val Colors.emptySpaceBorder: Color
-    get() = if (isLight) Gray1 else Gray4
+  get() = if (isLight) Gray1 else Gray4
 
 val Colors.guessBorder: Color
-    get() = if (isLight) Gray6 else Gray7
+  get() = if (isLight) Gray6 else Gray7
 
 val Colors.keyboardButtonBackground: Color
-    get() = if (isLight) Gray5 else Gray3
+  get() = if (isLight) Gray5 else Gray3

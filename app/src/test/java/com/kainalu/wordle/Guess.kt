@@ -9,31 +9,29 @@ import org.junit.Test
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class GuessTests {
-    @Test
-    fun `UnsubmittedGuess insert inserts character`() {
-        assertEquals(UnsubmittedGuess(WORD_SIZE, "a"), UnsubmittedGuess(WORD_SIZE).insert('a'))
-    }
+class Guess {
+  @Test
+  fun `UnsubmittedGuess insert inserts character`() {
+    assertEquals(UnsubmittedGuess(WORD_SIZE, "a"), UnsubmittedGuess(WORD_SIZE).insert('a'))
+  }
 
-    @Test
-    fun `UnsubmittedGuess insert when full is no-op`() {
-        assertEquals(
-            UnsubmittedGuess(WORD_SIZE, "abcde"),
-            UnsubmittedGuess(WORD_SIZE, "abcde").insert('f')
-        )
-    }
+  @Test
+  fun `UnsubmittedGuess insert when full is no-op`() {
+    assertEquals(
+        UnsubmittedGuess(WORD_SIZE, "abcde"), UnsubmittedGuess(WORD_SIZE, "abcde").insert('f'))
+  }
 
-    @Test
-    fun `UnsubmittedGuess delete deletes last character`() {
-        assertEquals(UnsubmittedGuess(WORD_SIZE, "ab"), UnsubmittedGuess(WORD_SIZE, "abc").delete())
-    }
+  @Test
+  fun `UnsubmittedGuess delete deletes last character`() {
+    assertEquals(UnsubmittedGuess(WORD_SIZE, "ab"), UnsubmittedGuess(WORD_SIZE, "abc").delete())
+  }
 
-    @Test
-    fun `UnsubmittedGuess delete is no-op when empty`() {
-        assertEquals(UnsubmittedGuess(WORD_SIZE), UnsubmittedGuess(WORD_SIZE).delete())
-    }
+  @Test
+  fun `UnsubmittedGuess delete is no-op when empty`() {
+    assertEquals(UnsubmittedGuess(WORD_SIZE), UnsubmittedGuess(WORD_SIZE).delete())
+  }
 
-    companion object {
-        private const val WORD_SIZE = 5
-    }
+  companion object {
+    private const val WORD_SIZE = 5
+  }
 }

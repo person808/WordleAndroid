@@ -11,6 +11,5 @@ private const val MAX_GUESSES = 6
 @Module
 @InstallIn(SingletonComponent::class)
 object SettingsModule {
-    @Provides
-    fun providesGameSettings() = GameSettings(maxGuesses = MAX_GUESSES)
+  @Provides fun providesGameSettings() = GameSettings(maxGuesses = MAX_GUESSES)
 }

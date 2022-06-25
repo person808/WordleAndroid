@@ -5,6 +5,5 @@ import androidx.room.Query
 
 @Dao
 interface ValidGuessesDao {
-    @Query("SELECT * FROM validGuesses")
-    suspend fun getAll(): List<AllowedGuess>
+  @Query("SELECT * FROM validGuesses") suspend fun getAll(): List<AllowedGuess>
 }

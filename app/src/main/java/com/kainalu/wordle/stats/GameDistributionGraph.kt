@@ -1,7 +1,12 @@
 package com.kainalu.wordle.stats
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,34 +24,34 @@ private val LABEL_FONT_SIZE = 10.sp
 @Preview
 @Composable
 fun ChartLinePreview() {
-    ChartLine(text = "0")
+  ChartLine(text = "0")
 }
 
 @Composable
 fun ChartLine(modifier: Modifier = Modifier, text: String) {
-    Text(
-        text,
-        modifier = modifier
-            .defaultMinSize(minWidth = 8.dp)
-            .background(MaterialTheme.colors.incorrectGuess)
-            .padding(horizontal = 8.dp, vertical = 2.dp),
-        color = Color.White,
-        fontSize = LABEL_FONT_SIZE,
-        fontWeight = FontWeight.Bold,
-    )
+  Text(
+      text,
+      modifier =
+          modifier
+              .defaultMinSize(minWidth = 8.dp)
+              .background(MaterialTheme.colors.incorrectGuess)
+              .padding(horizontal = 8.dp, vertical = 2.dp),
+      color = Color.White,
+      fontSize = LABEL_FONT_SIZE,
+      fontWeight = FontWeight.Bold,
+  )
 }
 
 @Composable
 fun GameDistributionChart(gameDistribution: Map<Int, Int>) {
-    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        gameDistribution.forEach { (numGuesses, numGames) ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(numGuesses.toString(), fontSize = LABEL_FONT_SIZE)
-                ChartLine(text = numGames.toString())
-            }
-        }
+  Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    gameDistribution.forEach { (numGuesses, numGames) ->
+      Row(
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(numGuesses.toString(), fontSize = LABEL_FONT_SIZE)
+        ChartLine(text = numGames.toString())
+      }
     }
+  }
 }

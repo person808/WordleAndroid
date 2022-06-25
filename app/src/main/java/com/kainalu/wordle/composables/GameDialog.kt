@@ -4,7 +4,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
@@ -22,39 +27,35 @@ fun GameDialog(
     properties: DialogProperties = DialogProperties(),
     content: @Composable () -> Unit
 ) {
-    Dialog(onDismissRequest, properties) {
-        Surface(
-            shape = MaterialTheme.shapes.medium,
-            color = MaterialTheme.colors.surface,
-            contentColor = contentColorFor(MaterialTheme.colors.surface),
+  Dialog(onDismissRequest, properties) {
+    Surface(
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colors.surface,
+        contentColor = contentColorFor(MaterialTheme.colors.surface),
+    ) {
+      Column(modifier = Modifier.fillMaxWidth()) {
+        ConstraintLayout(
+            modifier = Modifier.fillMaxWidth().padding(start = 8.dp, top = 8.dp, end = 8.dp),
         ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                ConstraintLayout(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp, top = 8.dp, end = 8.dp),
-                ) {
-                    val (titleRef, closeButtonRef) = createRefs()
+          val (titleRef, closeButtonRef) = createRefs()
 
-                    Text(title, modifier = Modifier.constrainAs(titleRef) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }, fontWeight = FontWeight.Bold)
-                    IconButton(
-                        modifier = Modifier.constrainAs(closeButtonRef) {
-                            end.linkTo(parent.end)
-                        },
-                        onClick = onDismissRequest) {
-                        Icon(Icons.Default.Close, contentDescription = null)
-                    }
-                }
-
-                Box(Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp)) {
-                    content()
-                }
-            }
+          Text(
+              title,
+              modifier =
+                  Modifier.constrainAs(titleRef) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                  },
+              fontWeight = FontWeight.Bold)
+          IconButton(
+              modifier = Modifier.constrainAs(closeButtonRef) { end.linkTo(parent.end) },
+              onClick = onDismissRequest) { Icon(Icons.Default.Close, contentDescription = null) }
         }
+
+        Box(Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp)) { content() }
+      }
     }
+  }
 }
