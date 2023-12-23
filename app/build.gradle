@@ -4,7 +4,7 @@ plugins {
     id 'com.google.devtools.ksp' version '1.6.21-1.0.6'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'com.google.protobuf' version '0.8.17'
+    id 'com.google.protobuf' version '0.9.0'
     id 'com.ncorti.ktfmt.gradle' version '0.8.0'
 }
 
@@ -52,6 +52,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'com.kainalu.wordle'
 }
 
 ksp {
