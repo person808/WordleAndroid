@@ -17,7 +17,7 @@ interface GameData {
 
 sealed class GameState {
 
-  object Loading : GameState()
+  data object Loading : GameState()
 
   data class Active(
       override val answer: String,

@@ -39,9 +39,9 @@ import com.kainalu.wordle.ui.theme.partialMatch
 import com.kainalu.wordle.ui.theme.submittedGuess
 
 sealed class Key {
-  data class Character(val char: Char) : Key()
-  object Submit : Key()
-  object Delete : Key()
+    data class Character(val char: Char) : Key()
+    data object Submit : Key()
+    data object Delete : Key()
 }
 
 private val QWERTY_KEYBOARD_LAYOUT: List<List<Key>> =
@@ -99,14 +99,15 @@ private fun KeyboardButton(
 ) {
   Box(
       modifier =
-          modifier
-              .height(40.dp)
-              .clip(RoundedCornerShape(2.dp))
-              .background(
-                  if (backgroundColor.isSpecified) backgroundColor
-                  else MaterialTheme.colors.keyboardButtonBackground)
-              .clickable { onClick() }
-              .padding(horizontal = 8.dp, vertical = 12.dp),
+      modifier
+          .height(40.dp)
+          .clip(RoundedCornerShape(2.dp))
+          .background(
+              if (backgroundColor.isSpecified) backgroundColor
+              else MaterialTheme.colors.keyboardButtonBackground
+          )
+          .clickable { onClick() }
+          .padding(horizontal = 8.dp, vertical = 12.dp),
       contentAlignment = Alignment.Center) { content() }
 }
 

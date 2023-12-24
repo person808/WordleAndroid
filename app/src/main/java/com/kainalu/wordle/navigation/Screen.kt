@@ -1,7 +1,7 @@
 package com.kainalu.wordle.navigation
 
 sealed class Screen(val route: String) {
-  object Game : Screen("game")
-  object Statistics : Screen("stats")
-  object Help : Screen("help")
+  data object Game : Screen("game")
+  data object Statistics : Screen("stats")
+  data object Help : Screen("help")
 }
