@@ -66,7 +66,7 @@ ksp {
 }
 
 dependencies {
-    val lifecycle_version = "2.4.1"
+    val lifecycle_version = "2.6.2"
     val roomVersion = "2.6.1"
     val nav_version = "2.7.6"
 
@@ -93,7 +93,7 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
 
     implementation("androidx.datastore:datastore:1.0.0")
-    implementation("com.google.protobuf:protobuf-javalite:3.18.0")
+    implementation("com.google.protobuf:protobuf-javalite:3.25.1")
     implementation("com.google.dagger:hilt-android:$daggerVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     ksp("com.google.dagger:dagger-compiler:$daggerVersion")
@@ -101,7 +101,7 @@ dependencies {
 
     implementation("com.jakewharton.timber:timber:5.0.1")
 
-    testImplementation("junit:junit:4.+")
+    testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
