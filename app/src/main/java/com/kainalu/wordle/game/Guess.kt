@@ -2,14 +2,17 @@ package com.kainalu.wordle.game
 
 /** Represents the various letters a submitted guess is made of */
 sealed class GuessResult {
+  /** Character value of this GuessResult */
+  abstract val letter: Char
+
   /** A letter that is incorrect */
-  data class Incorrect(val letter: Char) : GuessResult()
+  data class Incorrect(override val letter: Char) : GuessResult()
 
   /** A letter that is partially correct */
-  data class PartialMatch(val letter: Char) : GuessResult()
+  data class PartialMatch(override val letter: Char) : GuessResult()
 
   /** A letter that is correct */
-  data class Correct(val letter: Char) : GuessResult()
+  data class Correct(override val letter: Char) : GuessResult()
 }
 
 sealed class Guess

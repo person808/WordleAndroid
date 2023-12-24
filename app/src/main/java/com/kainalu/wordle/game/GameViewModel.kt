@@ -169,24 +169,41 @@ constructor(
       return guess
     }
 
+    // Check the guess. The key rule that must be followed is that a letter in the answer may
+    // only be used as a correct or partial match once. The same letter in the answer cannot be used
+    // to mark multiple letters in the answer as correct or partial matches.
+
+    // Keep track of the letters in the answer that have already been used to mark a correct or
+    // partial match
+    val consumedLetterIndices = mutableSetOf<Int>()
     val results =
       mutableMapOf<Int, GuessResult>().withDefault { key -> GuessResult.Incorrect(guess[key]) }
 
-    // Check for correct letters first
+    // Check for correct letters first. We don't want to "consume" correct matches which could
+    // happen if we checked for partial matches first.
     guess.forEachIndexed { index, letter ->
       if (letter.equals(answer[index], ignoreCase = true)) {
         results[index] = GuessResult.Correct(letter)
+        consumedLetterIndices.add(index) // Mark letter in answer as consumed
       }
     }
 
     // Check for partial matches next (right letter, wrong place)
-    val answerLetters = answer.lowercase().toSet()
-    guess.forEachIndexed { index, letter ->
-      if (
-        answerLetters.contains(letter.lowercaseChar()) &&
-          results.getValue(index) is GuessResult.Incorrect
-      ) {
-        results[index] = GuessResult.PartialMatch(letter)
+    guess.forEachIndexed { guessIndex, guessLetter ->
+      if (results[guessIndex] is GuessResult.Correct) {
+        return@forEachIndexed
+      }
+
+      answer.forEachIndexed { answerIndex, answerLetter ->
+        // If the answer letter has not been consumed yet but still is equal to the guess letter
+        // then we know its a partial match because we already processed correct matches above.
+        if (
+          !consumedLetterIndices.contains(answerIndex) &&
+            guessLetter.equals(answerLetter, ignoreCase = true)
+        ) {
+          results[guessIndex] = GuessResult.PartialMatch(guessLetter)
+          consumedLetterIndices.add(answerIndex) // Mark letter in answer as consumed
+        }
       }
     }
 
