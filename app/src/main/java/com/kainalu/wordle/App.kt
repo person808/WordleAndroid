@@ -20,7 +20,7 @@ import com.kainalu.wordle.navigation.Screen
 import com.kainalu.wordle.stats.StatsScreen
 
 val LocalSnackbarHostState =
-    compositionLocalOf<SnackbarHostState> { error("No SnackbarHostState provided") }
+  compositionLocalOf<SnackbarHostState> { error("No SnackbarHostState provided") }
 
 @Preview
 @Composable
@@ -30,13 +30,15 @@ fun App() {
 
   CompositionLocalProvider(LocalSnackbarHostState provides scaffoldState.snackbarHostState) {
     Scaffold(
-        modifier = Modifier.safeDrawingPadding(),
-        scaffoldState = scaffoldState,
-        topBar = { AppBar(navController) }) { padding ->
+      modifier = Modifier.safeDrawingPadding(),
+      scaffoldState = scaffoldState,
+      topBar = { AppBar(navController) }
+    ) { padding ->
       NavHost(
-          navController = navController,
-          startDestination = Screen.Game.route,
-          Modifier.padding(padding)) {
+        navController = navController,
+        startDestination = Screen.Game.route,
+        Modifier.padding(padding)
+      ) {
         composable(Screen.Game.route) { GameScreen() }
         dialog(Screen.Statistics.route) { StatsScreen(navController) }
       }

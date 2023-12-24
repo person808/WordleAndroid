@@ -40,9 +40,10 @@ private fun SpaceLetter(letter: Char, color: Color) {
 @Composable
 fun EmptySpace() {
   SpaceBox(
-      modifier =
-          Modifier.background(MaterialTheme.colors.surface)
-              .border(BORDER_WIDTH, MaterialTheme.colors.emptySpaceBorder)) {}
+    modifier =
+      Modifier.background(MaterialTheme.colors.surface)
+        .border(BORDER_WIDTH, MaterialTheme.colors.emptySpaceBorder)
+  ) {}
 }
 
 @Preview(showBackground = true)
@@ -73,9 +74,10 @@ fun CorrectSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) {
 @Composable
 fun GuessSpace(@PreviewParameter(SampleLetterProvider::class) letter: Char) {
   SpaceBox(
-      modifier =
-          Modifier.background(MaterialTheme.colors.surface)
-              .border(BORDER_WIDTH, MaterialTheme.colors.guessBorder)) {
+    modifier =
+      Modifier.background(MaterialTheme.colors.surface)
+        .border(BORDER_WIDTH, MaterialTheme.colors.guessBorder)
+  ) {
     SpaceLetter(letter = letter, color = MaterialTheme.colors.onSurface)
   }
 }

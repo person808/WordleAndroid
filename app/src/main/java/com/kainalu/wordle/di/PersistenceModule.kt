@@ -18,9 +18,9 @@ object PersistenceModule {
 
   @Provides
   fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
-      Room.databaseBuilder(context, AppDatabase::class.java, "wordle.db")
-          .createFromAsset("wordle.db")
-          .build()
+    Room.databaseBuilder(context, AppDatabase::class.java, "wordle.db")
+      .createFromAsset("wordle.db")
+      .build()
 
   @Provides fun provideAnswersDao(db: AppDatabase) = db.validAnswersDao()
 
@@ -28,5 +28,5 @@ object PersistenceModule {
 
   @Provides
   fun provideStatsDataStore(@ApplicationContext context: Context): DataStore<Stats> =
-      context.statsDataStore
+    context.statsDataStore
 }

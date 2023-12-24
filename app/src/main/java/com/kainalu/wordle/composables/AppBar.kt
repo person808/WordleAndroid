@@ -23,18 +23,17 @@ import com.kainalu.wordle.navigation.Screen
 fun AppBar(navController: NavController, modifier: Modifier = Modifier) {
   Column(modifier = modifier) {
     TopAppBar(
-        title = { Text("Wordle") },
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp,
-        actions = {
-          IconButton(onClick = {}) { Icon(Icons.Outlined.Help, contentDescription = null) }
-          IconButton(onClick = { navController.navigate(Screen.Statistics.route) }) {
-            Icon(Icons.Outlined.Leaderboard, contentDescription = null)
-          }
-          IconButton(onClick = { /*TODO*/}) {
-            Icon(Icons.Filled.Settings, contentDescription = null)
-          }
-        })
+      title = { Text("Wordle") },
+      backgroundColor = Color.Transparent,
+      elevation = 0.dp,
+      actions = {
+        IconButton(onClick = {}) { Icon(Icons.Outlined.Help, contentDescription = null) }
+        IconButton(onClick = { navController.navigate(Screen.Statistics.route) }) {
+          Icon(Icons.Outlined.Leaderboard, contentDescription = null)
+        }
+        IconButton(onClick = { /*TODO*/}) { Icon(Icons.Filled.Settings, contentDescription = null) }
+      }
+    )
     Divider()
   }
 }

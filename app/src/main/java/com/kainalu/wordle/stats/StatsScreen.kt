@@ -42,20 +42,23 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
     when (val s = state) {
       is StatsScreenState.Loaded -> {
         val stats =
-            mapOf(
-                "Games Played" to s.gamesPlayed,
-                "Win %" to s.winRate.toInt(),
-                "Current Streak" to s.currentWinStreak,
-                "Max Streak" to s.maxWinStreak,
-            )
+          mapOf(
+            "Games Played" to s.gamesPlayed,
+            "Win %" to s.winRate.toInt(),
+            "Current Streak" to s.currentWinStreak,
+            "Max Streak" to s.maxWinStreak,
+          )
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+          verticalArrangement = Arrangement.spacedBy(12.dp),
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
           Row(
-              modifier = Modifier.fillMaxWidth(),
-              horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-          ) { stats.forEach { (label, value) -> Stat(value, label) } }
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+          ) {
+            stats.forEach { (label, value) -> Stat(value, label) }
+          }
 
           Text("Game Distribution", fontWeight = FontWeight.Bold)
           GameDistributionChart(s.gameDistribution)

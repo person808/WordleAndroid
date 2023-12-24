@@ -30,15 +30,15 @@ fun ChartLinePreview() {
 @Composable
 fun ChartLine(modifier: Modifier = Modifier, text: String) {
   Text(
-      text,
-      modifier =
-          modifier
-              .defaultMinSize(minWidth = 8.dp)
-              .background(MaterialTheme.colors.incorrectGuess)
-              .padding(horizontal = 8.dp, vertical = 2.dp),
-      color = Color.White,
-      fontSize = LABEL_FONT_SIZE,
-      fontWeight = FontWeight.Bold,
+    text,
+    modifier =
+      modifier
+        .defaultMinSize(minWidth = 8.dp)
+        .background(MaterialTheme.colors.incorrectGuess)
+        .padding(horizontal = 8.dp, vertical = 2.dp),
+    color = Color.White,
+    fontSize = LABEL_FONT_SIZE,
+    fontWeight = FontWeight.Bold,
   )
 }
 
@@ -47,8 +47,9 @@ fun GameDistributionChart(gameDistribution: Map<Int, Int>) {
   Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
     gameDistribution.forEach { (numGuesses, numGames) ->
       Row(
-          verticalAlignment = Alignment.CenterVertically,
-          horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+      ) {
         Text(numGuesses.toString(), fontSize = LABEL_FONT_SIZE)
         ChartLine(text = numGames.toString())
       }

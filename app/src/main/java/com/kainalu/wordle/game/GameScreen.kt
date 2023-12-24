@@ -37,23 +37,25 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltVie
         is Event.GuessNotInWordList -> snackbarState.showSnackbar("Not in word list")
         is Event.GuessTooShort -> snackbarState.showSnackbar("Not enough letters")
         is Event.GameFinished ->
-            snackbarState.showSnackbar(if (event.won) "You win!" else event.answer.uppercase())
+          snackbarState.showSnackbar(if (event.won) "You win!" else event.answer.uppercase())
       }
     }
   }
 
   Column(
-      modifier = modifier.fillMaxSize(),
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.SpaceEvenly) {
+    modifier = modifier.fillMaxSize(),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.SpaceEvenly
+  ) {
     // Need to rebind state to let compiler smart cast state type
     state.let { state ->
       if (state is GameData) {
         GameBoard(
-            modifier = Modifier.padding(16.dp),
-            guesses = state.guesses,
-            maxGuesses = state.maxGuesses,
-            wordSize = state.answer.length)
+          modifier = Modifier.padding(16.dp),
+          guesses = state.guesses,
+          maxGuesses = state.maxGuesses,
+          wordSize = state.answer.length
+        )
         Keyboard(modifier = Modifier.padding(16.dp), guessResults = state.guessResults) { key ->
           when (key) {
             is Key.Character -> viewModel.guessLetter(key.char)
@@ -68,10 +70,10 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltVie
 
 @Composable
 fun GameBoard(
-    modifier: Modifier = Modifier,
-    guesses: List<Guess>,
-    maxGuesses: Int,
-    wordSize: Int,
+  modifier: Modifier = Modifier,
+  guesses: List<Guess>,
+  maxGuesses: Int,
+  wordSize: Int,
 ) {
   Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
     guesses.forEach { guess ->

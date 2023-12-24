@@ -22,36 +22,40 @@ import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
 fun GameDialog(
-    title: String = "",
-    onDismissRequest: () -> Unit,
-    properties: DialogProperties = DialogProperties(),
-    content: @Composable () -> Unit
+  title: String = "",
+  onDismissRequest: () -> Unit,
+  properties: DialogProperties = DialogProperties(),
+  content: @Composable () -> Unit
 ) {
   Dialog(onDismissRequest, properties) {
     Surface(
-        shape = MaterialTheme.shapes.medium,
-        color = MaterialTheme.colors.surface,
-        contentColor = contentColorFor(MaterialTheme.colors.surface),
+      shape = MaterialTheme.shapes.medium,
+      color = MaterialTheme.colors.surface,
+      contentColor = contentColorFor(MaterialTheme.colors.surface),
     ) {
       Column(modifier = Modifier.fillMaxWidth()) {
         ConstraintLayout(
-            modifier = Modifier.fillMaxWidth().padding(start = 8.dp, top = 8.dp, end = 8.dp),
+          modifier = Modifier.fillMaxWidth().padding(start = 8.dp, top = 8.dp, end = 8.dp),
         ) {
           val (titleRef, closeButtonRef) = createRefs()
 
           Text(
-              title,
-              modifier =
-                  Modifier.constrainAs(titleRef) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                  },
-              fontWeight = FontWeight.Bold)
+            title,
+            modifier =
+              Modifier.constrainAs(titleRef) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+              },
+            fontWeight = FontWeight.Bold
+          )
           IconButton(
-              modifier = Modifier.constrainAs(closeButtonRef) { end.linkTo(parent.end) },
-              onClick = onDismissRequest) { Icon(Icons.Default.Close, contentDescription = null) }
+            modifier = Modifier.constrainAs(closeButtonRef) { end.linkTo(parent.end) },
+            onClick = onDismissRequest
+          ) {
+            Icon(Icons.Default.Close, contentDescription = null)
+          }
         }
 
         Box(Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp)) { content() }

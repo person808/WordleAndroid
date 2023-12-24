@@ -24,4 +24,4 @@ object StatsSerializer : Serializer<Stats> {
 }
 
 val Context.statsDataStore: DataStore<Stats> by
-    dataStore(fileName = "stats.pb", serializer = StatsSerializer)
+  dataStore(fileName = "stats.pb", serializer = StatsSerializer)

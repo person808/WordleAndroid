@@ -20,18 +20,18 @@ sealed class GameState {
   data object Loading : GameState()
 
   data class Active(
-      override val answer: String,
-      override val guesses: List<Guess> = emptyList(),
-      override val maxGuesses: Int,
-      override val guessResults: Map<Char, GuessResult> = emptyMap(),
-      override val date: LocalDate,
+    override val answer: String,
+    override val guesses: List<Guess> = emptyList(),
+    override val maxGuesses: Int,
+    override val guessResults: Map<Char, GuessResult> = emptyMap(),
+    override val date: LocalDate,
   ) : GameState(), GameData
 
   data class Finished(
-      override val answer: String,
-      override val guesses: List<Guess> = emptyList(),
-      override val maxGuesses: Int,
-      override val guessResults: Map<Char, GuessResult> = emptyMap(),
-      override val date: LocalDate,
+    override val answer: String,
+    override val guesses: List<Guess> = emptyList(),
+    override val maxGuesses: Int,
+    override val guessResults: Map<Char, GuessResult> = emptyMap(),
+    override val date: LocalDate,
   ) : GameState(), GameData
 }

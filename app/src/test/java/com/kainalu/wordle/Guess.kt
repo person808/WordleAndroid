@@ -18,7 +18,9 @@ class Guess {
   @Test
   fun `UnsubmittedGuess insert when full is no-op`() {
     assertEquals(
-        UnsubmittedGuess(WORD_SIZE, "abcde"), UnsubmittedGuess(WORD_SIZE, "abcde").insert('f'))
+      UnsubmittedGuess(WORD_SIZE, "abcde"),
+      UnsubmittedGuess(WORD_SIZE, "abcde").insert('f')
+    )
   }
 
   @Test

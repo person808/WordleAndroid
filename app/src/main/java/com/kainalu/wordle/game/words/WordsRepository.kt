@@ -11,5 +11,5 @@ constructor(private val answersDao: ValidAnswersDao, private val guessesDao: Val
   suspend fun getAnswer(seed: Long): String = answersDao.getAll().random(Random(seed)).value
 
   suspend fun getValidGuessesSet(): Set<String> =
-      guessesDao.getAll().map { it.value }.toSet() + answersDao.getAll().map { it.value }
+    guessesDao.getAll().map { it.value }.toSet() + answersDao.getAll().map { it.value }
 }

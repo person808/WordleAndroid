@@ -15,7 +15,7 @@ sealed class GuessResult {
 sealed class Guess
 
 data class UnsubmittedGuess(private val maxSize: Int, private val value: String = "") :
-    Guess(), CharSequence by value, Iterable<Char> by value.asIterable() {
+  Guess(), CharSequence by value, Iterable<Char> by value.asIterable() {
 
   init {
     check(length <= maxSize)
@@ -40,4 +40,4 @@ data class UnsubmittedGuess(private val maxSize: Int, private val value: String 
 }
 
 data class SubmittedGuess(private val guessResults: List<GuessResult> = listOf()) :
-    Guess(), Iterable<GuessResult> by guessResults
+  Guess(), Iterable<GuessResult> by guessResults
