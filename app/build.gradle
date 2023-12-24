@@ -59,7 +59,6 @@ ksp {
 
 dependencies {
     def lifecycle_version = "2.4.1"
-    def accompanist_version = "0.24.5-alpha"
     def roomVersion = "2.6.1"
     def nav_version = "2.7.6"
 
@@ -92,7 +91,6 @@ dependencies {
     ksp "com.google.dagger:dagger-compiler:$daggerVersion"
     ksp "com.google.dagger:hilt-compiler:$daggerVersion"
 
-    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     testImplementation 'junit:junit:4.+'
