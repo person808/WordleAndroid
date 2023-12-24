@@ -7,4 +7,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "WordleApp"
-include ':app'
+include(":app")
