@@ -7,6 +7,8 @@ import com.kainalu.wordle.settings.GameSettings
 import com.kainalu.wordle.stats.GameResult
 import com.kainalu.wordle.stats.ResultsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +17,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.LocalDate
-import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel

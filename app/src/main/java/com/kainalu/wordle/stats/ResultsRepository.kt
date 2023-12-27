@@ -1,10 +1,10 @@
 package com.kainalu.wordle.stats
 
 import androidx.datastore.core.DataStore
-import kotlinx.coroutines.flow.first
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 
 class ResultsRepository @Inject constructor(private val statsDataStore: DataStore<Stats>) {
 
