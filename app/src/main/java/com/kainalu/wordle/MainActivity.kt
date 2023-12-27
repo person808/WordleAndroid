@@ -10,8 +10,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
     enableEdgeToEdge()
+    super.onCreate(savedInstanceState)
     setContent { WordleTheme { App() } }
   }
 }

@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,8 +23,19 @@ import com.kainalu.wordle.composables.GameDialog
 @Composable
 fun Stat(value: Int, label: String) {
   Column(horizontalAlignment = Alignment.CenterHorizontally) {
-    Text(value.toString(), fontSize = 24.sp, textAlign = TextAlign.Center)
-    Text(label, modifier = Modifier.width(28.dp), fontSize = 8.sp, textAlign = TextAlign.Center)
+    Text(
+      value.toString(),
+      style = MaterialTheme.typography.headlineSmall,
+      textAlign = TextAlign.Center
+    )
+    Text(
+      label,
+      modifier = Modifier.width(30.dp),
+      style = MaterialTheme.typography.labelSmall,
+      fontSize = 8.sp,
+      lineHeight = 12.sp,
+      textAlign = TextAlign.Center
+    )
   }
 }
 
@@ -60,7 +71,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
             stats.forEach { (label, value) -> Stat(value, label) }
           }
 
-          Text("Game Distribution", fontWeight = FontWeight.Bold)
+          Text("Game Distribution", style = MaterialTheme.typography.titleMedium)
           GameDistributionChart(s.gameDistribution)
         }
       }

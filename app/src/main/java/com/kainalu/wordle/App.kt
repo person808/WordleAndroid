@@ -2,12 +2,13 @@ package com.kainalu.wordle
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
@@ -25,13 +26,13 @@ val LocalSnackbarHostState =
 @Preview
 @Composable
 fun App() {
+  val snackbarHostState = remember { SnackbarHostState() }
   val navController = rememberNavController()
-  val scaffoldState = rememberScaffoldState()
 
-  CompositionLocalProvider(LocalSnackbarHostState provides scaffoldState.snackbarHostState) {
+  CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
     Scaffold(
       modifier = Modifier.safeDrawingPadding(),
-      scaffoldState = scaffoldState,
+      snackbarHost = { SnackbarHost(snackbarHostState) },
       topBar = { AppBar(navController) }
     ) { padding ->
       NavHost(

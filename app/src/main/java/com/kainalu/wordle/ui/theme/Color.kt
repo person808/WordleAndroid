@@ -1,42 +1,65 @@
 package com.kainalu.wordle.ui.theme
 
-import androidx.compose.material.Colors
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF4CAF50)
+val lightPrimary = Color(0xFF6750A4)
+val lightOnPrimary = Color(0xFFFFFFFF)
+val lightPrimaryContainer = Color(0xFFEADDFF)
+val lightOnPrimaryContainer = Color(0xFF21005D)
+val lightSecondary = Color(0xFF625B71)
+val lightOnSecondary = Color(0xFFFFFFFF)
+val lightSecondaryContainer = Color(0xFFE8DEF8)
+val lightOnSecondaryContainer = Color(0xFF1D192B)
+val lightTertiary = Color(0xFF7D5260)
+val lightOnTertiary = Color(0xFFFFFFFF)
+val lightTertiaryContainer = Color(0xFFFFD8E4)
+val lightOnTertiaryContainer = Color(0xFF31111D)
+val lightError = Color(0xFFB3261E)
+val lightOnError = Color(0xFFFFFFFF)
+val lightErrorContainer = Color(0xFFF9DEDC)
+val lightOnErrorContainer = Color(0xFF410E0B)
+val lightOutline = Color(0xFF79747E)
+val lightBackground = Color(0xFFFFFBFE)
+val lightOnBackground = Color(0xFF1C1B1F)
+val lightSurface = Color(0xFFFFFBFE)
+val lightOnSurface = Color(0xFF1C1B1F)
+val lightSurfaceVariant = Color(0xFFE7E0EC)
+val lightOnSurfaceVariant = Color(0xFF49454F)
+val lightInverseSurface = Color(0xFF313033)
+val lightInverseOnSurface = Color(0xFFF4EFF4)
+val lightInversePrimary = Color(0xFFD0BCFF)
+val lightShadow = Color(0xFF000000)
+val lightSurfaceTint = Color(0xFF6750A4)
+val lightOutlineVariant = Color(0xFFCAC4D0)
+val lightScrim = Color(0xFF000000)
 
-private val Green = Color(0xFF6AAA64)
-private val DarkGreen = Color(0xFF538D4E)
-private val Yellow = Color(0xFFC9B458)
-private val DarkYellow = Color(0xFFB59F3B)
-private val Gray1 = Color(0xFFBDBDBD)
-private val Gray2 = Color(0xFF787C7E)
-private val Gray3 = Color(0xFF818384)
-private val Gray4 = Color(0xFF3A3A3C)
-private val Gray5 = Color(0xFFD3D6DA)
-private val Gray6 = Color(0xFF878A8C)
-private val Gray7 = Color(0xFF565758)
-
-val Colors.correctGuess: Color
-  get() = if (isLight) Green else DarkGreen
-
-val Colors.partialMatch: Color
-  get() = if (isLight) Yellow else DarkYellow
-
-val Colors.incorrectGuess: Color
-  get() = if (isLight) Gray2 else Gray4
-
-val Colors.submittedGuess: Color
-  get() = Color.White
-
-val Colors.emptySpaceBorder: Color
-  get() = if (isLight) Gray1 else Gray4
-
-val Colors.guessBorder: Color
-  get() = if (isLight) Gray6 else Gray7
-
-val Colors.keyboardButtonBackground: Color
-  get() = if (isLight) Gray5 else Gray3
+val darkPrimary = Color(0xFFD0BCFF)
+val darkOnPrimary = Color(0xFF381E72)
+val darkPrimaryContainer = Color(0xFF4F378B)
+val darkOnPrimaryContainer = Color(0xFFEADDFF)
+val darkSecondary = Color(0xFFCCC2DC)
+val darkOnSecondary = Color(0xFF332D41)
+val darkSecondaryContainer = Color(0xFF4A4458)
+val darkOnSecondaryContainer = Color(0xFFE8DEF8)
+val darkTertiary = Color(0xFFEFB8C8)
+val darkOnTertiary = Color(0xFF492532)
+val darkTertiaryContainer = Color(0xFF633B48)
+val darkOnTertiaryContainer = Color(0xFFFFD8E4)
+val darkError = Color(0xFFF2B8B5)
+val darkOnError = Color(0xFF601410)
+val darkErrorContainer = Color(0xFF8C1D18)
+val darkOnErrorContainer = Color(0xFFF9DEDC)
+val darkOutline = Color(0xFF938F99)
+val darkBackground = Color(0xFF1C1B1F)
+val darkOnBackground = Color(0xFFE6E1E5)
+val darkSurface = Color(0xFF1C1B1F)
+val darkOnSurface = Color(0xFFE6E1E5)
+val darkSurfaceVariant = Color(0xFF49454F)
+val darkOnSurfaceVariant = Color(0xFFCAC4D0)
+val darkInverseSurface = Color(0xFFE6E1E5)
+val darkInverseOnSurface = Color(0xFF313033)
+val darkInversePrimary = Color(0xFF6750A4)
+val darkShadow = Color(0xFF000000)
+val darkSurfaceTint = Color(0xFFD0BCFF)
+val darkOutlineVariant = Color(0xFF49454F)
+val darkScrim = Color(0xFF000000)

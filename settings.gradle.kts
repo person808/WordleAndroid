@@ -25,8 +25,7 @@ dependencyResolutionManagement {
 
       // Compose
       library("androidx-compose-ui", "androidx.compose.ui", "ui").versionRef(compose)
-      library("androidx-compose-material", "androidx.compose.material", "material")
-        .versionRef(compose)
+      library("androidx-compose-material3", "androidx.compose.material3:material3:1.1.2")
       library("androidx-compose-foundation", "androidx.compose.foundation", "foundation")
         .versionRef(compose)
       library("androidx-compose-ui-tooling-preview", "androidx.compose.ui", "ui-tooling-preview")

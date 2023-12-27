@@ -56,7 +56,7 @@ dependencies {
   implementation(libs.androidx.appcompat)
   implementation(libs.material)
   implementation(libs.androidx.compose.ui.asProvider())
-  implementation(libs.androidx.compose.material.asProvider())
+  implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.compose.foundation)
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.compose.material.icons.extended)

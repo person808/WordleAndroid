@@ -12,11 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Backspace
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,11 +32,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kainalu.wordle.game.GuessResult
-import com.kainalu.wordle.ui.theme.correctGuess
-import com.kainalu.wordle.ui.theme.incorrectGuess
-import com.kainalu.wordle.ui.theme.keyboardButtonBackground
-import com.kainalu.wordle.ui.theme.partialMatch
-import com.kainalu.wordle.ui.theme.submittedGuess
+import com.kainalu.wordle.ui.theme.guessColorsPalette
 
 sealed class Key {
   data class Character(val char: Char) : Key()
@@ -57,12 +53,11 @@ private val QWERTY_KEYBOARD_LAYOUT: List<List<Key>> =
     }
   )
 
-@Preview(showBackground = true)
 @Composable
 fun Keyboard(
   modifier: Modifier = Modifier,
   layout: List<List<Key>> = QWERTY_KEYBOARD_LAYOUT,
-  @PreviewParameter(SampleGuessResultProvider::class) guessResults: Map<Char, GuessResult>,
+  guessResults: Map<Char, GuessResult>,
   onKeyPress: (Key) -> Unit = {}
 ) {
   Column(
@@ -110,7 +105,7 @@ private fun KeyboardButton(
         .clip(RoundedCornerShape(2.dp))
         .background(
           if (backgroundColor.isSpecified) backgroundColor
-          else MaterialTheme.colors.keyboardButtonBackground
+          else MaterialTheme.colorScheme.surfaceVariant
         )
         .clickable { onClick() }
         .padding(horizontal = 8.dp, vertical = 12.dp),
@@ -141,17 +136,17 @@ private fun TextButton(
 private fun LetterButton(text: String, result: GuessResult?, onClick: () -> Unit = {}) {
   val backgroundColor =
     when (result) {
-      is GuessResult.Correct -> MaterialTheme.colors.correctGuess
-      is GuessResult.PartialMatch -> MaterialTheme.colors.partialMatch
-      is GuessResult.Incorrect -> MaterialTheme.colors.incorrectGuess
+      is GuessResult.Correct -> MaterialTheme.guessColorsPalette.correctGuessBackground
+      is GuessResult.PartialMatch -> MaterialTheme.guessColorsPalette.partialMatchBackground
+      is GuessResult.Incorrect -> MaterialTheme.guessColorsPalette.incorrectGuessBackground
       null -> Color.Unspecified
     }
 
   val textColor =
     if (result == null) {
-      MaterialTheme.colors.onSurface
+      MaterialTheme.colorScheme.onSurfaceVariant
     } else {
-      MaterialTheme.colors.submittedGuess
+      MaterialTheme.guessColorsPalette.guessText
     }
 
   TextButton(
@@ -180,7 +175,7 @@ private fun IconButton(
       icon,
       modifier = Modifier.fillMaxHeight(),
       contentDescription = null,
-      tint = if (iconTint.isUnspecified) MaterialTheme.colors.onSurface else iconTint
+      tint = if (iconTint.isUnspecified) MaterialTheme.colorScheme.onSurfaceVariant else iconTint
     )
   }
 }
@@ -195,4 +190,12 @@ private class SampleGuessResultProvider : PreviewParameterProvider<Map<Char, Gue
         'e' to GuessResult.Incorrect('e')
       )
     )
+}
+
+@Preview
+@Composable
+fun KeyboardPreview(
+  @PreviewParameter(SampleGuessResultProvider::class) guessResults: Map<Char, GuessResult>
+) {
+  MaterialTheme { Keyboard(guessResults = guessResults) }
 }
