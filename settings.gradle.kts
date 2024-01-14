@@ -18,7 +18,7 @@ dependencyResolutionManagement {
       plugin("protobuf", "com.google.protobuf").version("0.9.4")
       plugin("ktfmt", "com.ncorti.ktfmt.gradle").version("0.16.0")
 
-      library("android-gradle", "com.android.tools.build:gradle:8.2.0")
+      library("android-gradle", "com.android.tools.build:gradle:8.2.1")
       library("kotlin", "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
 
       library("desugarJdkLibs", "com.android.tools:desugar_jdk_libs:2.0.4")
