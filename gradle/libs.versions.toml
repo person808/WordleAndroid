@@ -6,7 +6,7 @@ room = "2.6.1"
 protobuf = "3.25.1"
 
 [libraries]
-android-gradle = "com.android.tools.build:gradle:8.2.1"
+android-gradle = "com.android.tools.build:gradle:8.5.2"
 kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20"
 
 desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.0.4"
