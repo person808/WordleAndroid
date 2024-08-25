@@ -2,8 +2,8 @@ package com.kainalu.wordle.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Help
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.Leaderboard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,7 +25,7 @@ fun AppBar(navController: NavController, modifier: Modifier = Modifier) {
     TopAppBar(
       title = { Text("Wordle") },
       actions = {
-        IconButton(onClick = {}) { Icon(Icons.Outlined.Help, contentDescription = null) }
+        IconButton(onClick = {}) { Icon(Icons.AutoMirrored.Outlined.Help, contentDescription = null) }
         IconButton(onClick = { navController.navigate(Screen.Statistics.route) }) {
           Icon(Icons.Outlined.Leaderboard, contentDescription = null)
         }

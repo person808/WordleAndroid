@@ -14,7 +14,8 @@ buildscript {
 
 plugins {
   alias(libs.plugins.ksp) apply false
+  alias(libs.plugins.compose.compiler) apply false
   alias(libs.plugins.dagger.hilt.android) apply false
 }
 
-tasks.register("clean") { delete(rootProject.buildDir) }
+tasks.register("clean") { delete(rootProject.layout.buildDirectory) }

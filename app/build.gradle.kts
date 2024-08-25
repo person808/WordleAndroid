@@ -1,9 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Locale
 
 plugins {
   id("com.android.application")
   id("kotlin-android")
   alias(libs.plugins.ksp)
+  alias(libs.plugins.compose.compiler)
   alias(libs.plugins.dagger.hilt.android)
   alias(libs.plugins.protobuf)
   alias(libs.plugins.ktfmt)
@@ -37,7 +39,6 @@ android {
   }
   kotlinOptions { jvmTarget = "1.8" }
   buildFeatures { compose = true }
-  composeOptions { kotlinCompilerExtensionVersion = libs.versions.compose.get() }
   packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
   namespace = "com.kainalu.wordle"
 }
@@ -103,7 +104,7 @@ androidComponents {
   // workaround for https://github.com/google/ksp/issues/1590
   onVariants(selector().all()) { variant ->
     afterEvaluate {
-      val capName = variant.name.capitalize()
+      val capName = variant.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
       tasks.getByName<KotlinCompile>("ksp${capName}Kotlin") {
         setSource(tasks.getByName("generate${capName}Proto").outputs)
       }
