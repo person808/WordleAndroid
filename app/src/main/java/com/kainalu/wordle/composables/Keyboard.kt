@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Backspace
+import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -80,7 +80,7 @@ fun Keyboard(
             is Key.Delete ->
               IconButton(
                 modifier = Modifier.width(60.dp),
-                icon = Icons.Outlined.Backspace,
+                icon = Icons.AutoMirrored.Outlined.Backspace,
                 onClick = onClick
               )
           }

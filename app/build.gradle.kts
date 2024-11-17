@@ -12,12 +12,12 @@ plugins {
 }
 
 android {
-  compileSdk = 34
+  compileSdk = 35
 
   defaultConfig {
     applicationId = "com.kainalu.wordle"
     minSdk = 23
-    targetSdk = 34
+    targetSdk = 35
     versionCode = 1
     versionName = "1.0"
 
