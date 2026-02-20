@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
   id("com.android.application")
-  id("kotlin-android")
   alias(libs.plugins.ksp)
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.dagger.hilt.android)
