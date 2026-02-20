@@ -1,7 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.util.Locale
 
 plugins {
   id("com.android.application")
@@ -87,7 +85,7 @@ dependencies {
   ksp(libs.androidx.room.compiler)
 
   implementation(libs.androidx.datastore)
-  implementation(libs.protobuf.javalite)
+  implementation(libs.protobuf.kotlin.lite)
   implementation(libs.dagger.hilt.android)
   implementation(libs.androidx.hilt.navigation.compose)
   ksp(libs.dagger.compiler)
@@ -110,17 +108,5 @@ protobuf {
   // for more information.
   generateProtoTasks {
     all().forEach { task -> task.builtins { create("java") { option("lite") } } }
-  }
-}
-
-androidComponents {
-  // workaround for https://github.com/google/ksp/issues/1590
-  onVariants(selector().all()) { variant ->
-    afterEvaluate {
-      val capName = variant.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-      tasks.getByName<KotlinCompile>("ksp${capName}Kotlin") {
-        setSource(tasks.getByName("generate${capName}Proto").outputs)
-      }
-    }
   }
 }
