@@ -7,6 +7,7 @@ room = "2.8.4"
 protobuf = "4.33.5"
 kotlin = "2.3.10"
 ksp = "2.3.6"
+wire = "6.0.0-alpha02"
 
 [libraries]
 android-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -44,8 +45,8 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-datastore = "androidx.datastore:datastore:1.2.0"
 
 # Protobuf
-protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
-protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+wire = { group = "com.squareup.wire", name = "wire-gradle-plugin", version.ref = "wire" }
+wire-runtime = { group = "com.squareup.wire", name = "wire-runtime-jvm", version.ref = "wire" }
 
 # Dagger/Hilt
 dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
@@ -62,6 +63,6 @@ androidx-test-espresso-core = "androidx.test.espresso:espresso-core:3.7.0"
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-protobuf = { id = "com.google.protobuf", version = "0.9.6" }
 ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.25.0" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+wire = { id = "com.squareup.wire" }

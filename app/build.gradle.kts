@@ -6,8 +6,8 @@ plugins {
   alias(libs.plugins.ksp)
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.dagger.hilt.android)
-  alias(libs.plugins.protobuf)
   alias(libs.plugins.ktfmt)
+  alias(libs.plugins.wire)
 }
 
 kotlin {
@@ -83,8 +83,8 @@ dependencies {
   implementation(libs.androidx.room.ktx)
   ksp(libs.androidx.room.compiler)
 
+  implementation(libs.wire.runtime)
   implementation(libs.androidx.datastore)
-  implementation(libs.protobuf.kotlin.lite)
   implementation(libs.dagger.hilt.android)
   implementation(libs.androidx.hilt.navigation.compose)
   ksp(libs.dagger.compiler)
@@ -99,13 +99,6 @@ dependencies {
   debugImplementation(libs.androidx.compose.ui.tooling.asProvider())
 }
 
-protobuf {
-  protoc { artifact = libs.protobuf.protoc.get().toString() }
-
-  // Generates the java Protobuf-lite code for the Protobufs in this project. See
-  // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
-  // for more information.
-  generateProtoTasks {
-    all().forEach { task -> task.builtins { create("java") { option("lite") } } }
-  }
+wire {
+  kotlin {}
 }

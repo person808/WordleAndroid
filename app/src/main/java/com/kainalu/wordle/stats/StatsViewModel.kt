@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kainalu.wordle.settings.GameSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class StatsViewModel
@@ -25,14 +25,14 @@ constructor(
       val stats = resultsRepository.getStats()
       _screenState.value =
         StatsScreenState.Loaded(
-          gamesPlayed = stats.gamesPlayed,
-          winRate = stats.wins.toDouble() / stats.gamesPlayed * 100,
-          currentWinStreak = stats.currentWinStreak,
-          maxWinStreak = stats.longestWinStreak,
+          gamesPlayed = stats.games_played,
+          winRate = stats.wins.toDouble() / stats.games_played * 100,
+          currentWinStreak = stats.current_win_streak,
+          maxWinStreak = stats.longest_win_streak,
           gameDistribution =
             buildMap {
               (1..gameSettings.maxGuesses).forEach { guessNum ->
-                set(guessNum, stats.guessDistributionMap.getOrDefault(guessNum, 0))
+                set(guessNum, stats.guess_distribution.getOrDefault(guessNum, 0))
               }
             }
         )

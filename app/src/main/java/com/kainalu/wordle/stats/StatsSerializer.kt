@@ -1,26 +1,20 @@
 package com.kainalu.wordle.stats
 
 import android.content.Context
-import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
-import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream
 
 object StatsSerializer : Serializer<Stats> {
-  override val defaultValue: Stats = Stats.getDefaultInstance()
+  override val defaultValue: Stats = Stats()
 
   override suspend fun readFrom(input: InputStream): Stats {
-    try {
-      return Stats.parseFrom(input)
-    } catch (exception: InvalidProtocolBufferException) {
-      throw CorruptionException("Cannot read proto.", exception)
-    }
+      return Stats.ADAPTER.decode(input)
   }
 
-  override suspend fun writeTo(t: Stats, output: OutputStream) = t.writeTo(output)
+  override suspend fun writeTo(t: Stats, output: OutputStream) = Stats.ADAPTER.encode(stream = output, value = t)
 }
 
 val Context.statsDataStore: DataStore<Stats> by

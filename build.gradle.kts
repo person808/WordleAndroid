@@ -8,6 +8,7 @@ buildscript {
     classpath(libs.android.gradle)
     classpath(libs.kotlin)
     classpath(libs.ksp)
+    classpath(libs.wire)
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle.kts files
