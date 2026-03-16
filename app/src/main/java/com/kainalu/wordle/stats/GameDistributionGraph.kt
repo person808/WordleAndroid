@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 
 @Preview
@@ -36,7 +38,10 @@ fun ChartLine(modifier: Modifier = Modifier, text: String) {
 }
 
 @Composable
-fun GameDistributionChart(gameDistribution: Map<Int, Int>) {
+@Preview(showBackground = true)
+fun GameDistributionChart(@PreviewParameter(GameDistributionParameterProvider::class) gameDistribution: Map<Int, Int>) {
+  val highestNumberOfGames = gameDistribution.values.max()
+
   Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
     gameDistribution.forEach { (numGuesses, numGames) ->
       Row(
@@ -47,8 +52,12 @@ fun GameDistributionChart(gameDistribution: Map<Int, Int>) {
           numGuesses.toString(),
           style = MaterialTheme.typography.labelSmall,
         )
-        ChartLine(text = numGames.toString())
+        ChartLine(modifier = Modifier.then(if (numGames == 0) Modifier else Modifier.fillMaxWidth(numGames.toFloat() / highestNumberOfGames)), text = numGames.toString())
       }
     }
   }
+}
+
+class GameDistributionParameterProvider : PreviewParameterProvider<Map<Int, Int>> {
+  override val values = sequenceOf(mapOf(1 to 0, 2 to 4, 3 to 7, 4 to 3, 5 to 4, 6 to 2))
 }
