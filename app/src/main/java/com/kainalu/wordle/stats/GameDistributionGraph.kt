@@ -39,20 +39,26 @@ fun ChartLine(modifier: Modifier = Modifier, text: String) {
 
 @Composable
 @Preview(showBackground = true)
-fun GameDistributionChart(@PreviewParameter(GameDistributionParameterProvider::class) gameDistribution: Map<Int, Int>) {
+fun GameDistributionChart(
+  @PreviewParameter(GameDistributionParameterProvider::class) gameDistribution: Map<Int, Int>
+) {
   val highestNumberOfGames = gameDistribution.values.max()
 
   Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
     gameDistribution.forEach { (numGuesses, numGames) ->
       Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
       ) {
-        Text(
-          numGuesses.toString(),
-          style = MaterialTheme.typography.labelSmall,
+        Text(numGuesses.toString(), style = MaterialTheme.typography.labelSmall)
+        ChartLine(
+          modifier =
+            Modifier.then(
+              if (numGames == 0) Modifier
+              else Modifier.fillMaxWidth(numGames.toFloat() / highestNumberOfGames)
+            ),
+          text = numGames.toString(),
         )
-        ChartLine(modifier = Modifier.then(if (numGames == 0) Modifier else Modifier.fillMaxWidth(numGames.toFloat() / highestNumberOfGames)), text = numGames.toString())
       }
     }
   }

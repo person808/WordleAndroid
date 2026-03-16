@@ -62,6 +62,6 @@ androidx-test-espresso-core = "androidx.test.espresso:espresso-core:3.7.0"
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.25.0" }
+spotless = { id = "com.diffplug.spotless", version = "8.3.0" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 wire = { id = "com.squareup.wire" }

@@ -26,7 +26,7 @@ fun Stat(value: Int, label: String) {
     Text(
       value.toString(),
       style = MaterialTheme.typography.headlineSmall,
-      textAlign = TextAlign.Center
+      textAlign = TextAlign.Center,
     )
     Text(
       label,
@@ -34,7 +34,7 @@ fun Stat(value: Int, label: String) {
       style = MaterialTheme.typography.labelSmall,
       fontSize = 8.sp,
       lineHeight = 12.sp,
-      textAlign = TextAlign.Center
+      textAlign = TextAlign.Center,
     )
   }
 }
@@ -62,7 +62,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
 
         Column(
           verticalArrangement = Arrangement.spacedBy(12.dp),
-          horizontalAlignment = Alignment.CenterHorizontally
+          horizontalAlignment = Alignment.CenterHorizontally,
         ) {
           Row(
             modifier = Modifier.fillMaxWidth(),

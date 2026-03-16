@@ -31,7 +31,7 @@ private fun SpaceLetter(letter: Char, color: Color) {
     style = MaterialTheme.typography.headlineSmall,
     fontSize = 20.sp,
     fontWeight = FontWeight.Bold,
-    color = color
+    color = color,
   )
 }
 

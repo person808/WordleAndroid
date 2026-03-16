@@ -25,12 +25,16 @@ fun AppBar(navController: NavController, modifier: Modifier = Modifier) {
     TopAppBar(
       title = { Text("Wordle") },
       actions = {
-        IconButton(onClick = {}) { Icon(Icons.AutoMirrored.Outlined.Help, contentDescription = null) }
+        IconButton(onClick = {}) {
+          Icon(Icons.AutoMirrored.Outlined.Help, contentDescription = null)
+        }
         IconButton(onClick = { navController.navigate(Screen.Statistics.route) }) {
           Icon(Icons.Outlined.Leaderboard, contentDescription = null)
         }
-        IconButton(onClick = { /*TODO*/}) { Icon(Icons.Filled.Settings, contentDescription = null) }
-      }
+        IconButton(onClick = { /*TODO*/ }) {
+          Icon(Icons.Filled.Settings, contentDescription = null)
+        }
+      },
     )
   }
 }

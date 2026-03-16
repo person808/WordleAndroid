@@ -49,7 +49,7 @@ private val QWERTY_KEYBOARD_LAYOUT: List<List<Key>> =
       add(Key.Submit)
       addAll("zxcvbnm".map { Key.Character(it) })
       add(Key.Delete)
-    }
+    },
   )
 
 @Composable
@@ -57,12 +57,12 @@ fun Keyboard(
   modifier: Modifier = Modifier,
   layout: List<List<Key>> = QWERTY_KEYBOARD_LAYOUT,
   guessResults: Map<Char, GuessResult>,
-  onKeyPress: (Key) -> Unit = {}
+  onKeyPress: (Key) -> Unit = {},
 ) {
   Column(
     modifier = modifier,
     horizontalAlignment = Alignment.CenterHorizontally,
-    verticalArrangement = Arrangement.spacedBy(4.dp)
+    verticalArrangement = Arrangement.spacedBy(4.dp),
   ) {
     layout.forEach { row ->
       Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -73,7 +73,7 @@ fun Keyboard(
               LetterButton(
                 text = keybinding.char.uppercase(),
                 result = guessResults[keybinding.char],
-                onClick = onClick
+                onClick = onClick,
               )
             is Key.Submit ->
               TextButton(modifier = Modifier.width(60.dp), text = "Submit", onClick = onClick)
@@ -81,7 +81,7 @@ fun Keyboard(
               IconButton(
                 modifier = Modifier.width(60.dp),
                 icon = Icons.AutoMirrored.Outlined.Backspace,
-                onClick = onClick
+                onClick = onClick,
               )
           }
         }
@@ -95,7 +95,7 @@ private fun KeyboardButton(
   modifier: Modifier = Modifier,
   backgroundColor: Color = Color.Unspecified,
   onClick: () -> Unit = {},
-  content: @Composable () -> Unit
+  content: @Composable () -> Unit,
 ) {
   Box(
     modifier =
@@ -107,7 +107,7 @@ private fun KeyboardButton(
           else MaterialTheme.colorScheme.surfaceVariant
         )
         .clickable { onClick() },
-    contentAlignment = Alignment.Center
+    contentAlignment = Alignment.Center,
   ) {
     content()
   }
@@ -119,12 +119,12 @@ private fun TextButton(
   text: String,
   backgroundColor: Color = Color.Unspecified,
   textColor: Color = Color.Unspecified,
-  onClick: () -> Unit = {}
+  onClick: () -> Unit = {},
 ) {
   KeyboardButton(
     modifier = modifier.defaultMinSize(minWidth = 24.dp),
     backgroundColor = backgroundColor,
-    onClick = onClick
+    onClick = onClick,
   ) {
     Text(text = text, color = textColor, fontWeight = FontWeight.Bold, fontSize = 12.sp)
   }
@@ -152,7 +152,7 @@ private fun LetterButton(text: String, result: GuessResult?, onClick: () -> Unit
     text = text,
     backgroundColor = backgroundColor,
     textColor = textColor,
-    onClick = onClick
+    onClick = onClick,
   )
 }
 
@@ -167,13 +167,13 @@ private fun IconButton(
   KeyboardButton(
     modifier.defaultMinSize(24.dp),
     backgroundColor = backgroundColor,
-    onClick = onClick
+    onClick = onClick,
   ) {
     Icon(
       icon,
       modifier = Modifier.size(20.dp),
       contentDescription = null,
-      tint = if (iconTint.isUnspecified) MaterialTheme.colorScheme.onSurfaceVariant else iconTint
+      tint = if (iconTint.isUnspecified) MaterialTheme.colorScheme.onSurfaceVariant else iconTint,
     )
   }
 }
@@ -185,8 +185,8 @@ private class SampleGuessResultProvider : PreviewParameterProvider<Map<Char, Gue
       mapOf(
         'a' to GuessResult.Correct('a'),
         'g' to GuessResult.PartialMatch('g'),
-        'e' to GuessResult.Incorrect('e')
-      )
+        'e' to GuessResult.Incorrect('e'),
+      ),
     )
 }
 

@@ -19,7 +19,6 @@ sealed class Guess
 
 data class UnsubmittedGuess(private val maxSize: Int, private val value: String = "") :
   Guess(), CharSequence by value, Iterable<Char> by value.asIterable() {
-
   init {
     check(length <= maxSize)
     check(value.all { it.isLowerCase() })

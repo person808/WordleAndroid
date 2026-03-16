@@ -33,12 +33,12 @@ fun App() {
     Scaffold(
       modifier = Modifier.safeDrawingPadding(),
       snackbarHost = { SnackbarHost(snackbarHostState) },
-      topBar = { AppBar(navController) }
+      topBar = { AppBar(navController) },
     ) { padding ->
       NavHost(
         navController = navController,
         startDestination = Screen.Game.route,
-        Modifier.padding(padding)
+        Modifier.padding(padding),
       ) {
         composable(Screen.Game.route) { GameScreen() }
         dialog(Screen.Statistics.route) { StatsScreen(navController) }

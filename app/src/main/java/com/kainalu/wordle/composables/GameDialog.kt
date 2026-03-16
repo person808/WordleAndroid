@@ -23,16 +23,16 @@ fun GameDialog(
   title: String = "",
   onDismissRequest: () -> Unit,
   properties: DialogProperties = DialogProperties(),
-  content: @Composable () -> Unit
+  content: @Composable () -> Unit,
 ) {
   Dialog(onDismissRequest, properties) {
     Card(
       shape = MaterialTheme.shapes.extraLarge,
-      modifier = Modifier.fillMaxWidth().padding(24.dp)
+      modifier = Modifier.fillMaxWidth().padding(24.dp),
     ) {
       Column(modifier = Modifier.fillMaxWidth()) {
         ConstraintLayout(
-          modifier = Modifier.fillMaxWidth().padding(start = 8.dp, top = 8.dp, end = 8.dp),
+          modifier = Modifier.fillMaxWidth().padding(start = 8.dp, top = 8.dp, end = 8.dp)
         ) {
           val (titleRef, closeButtonRef) = createRefs()
 
@@ -45,11 +45,11 @@ fun GameDialog(
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
               },
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineSmall,
           )
           IconButton(
             modifier = Modifier.constrainAs(closeButtonRef) { end.linkTo(parent.end) },
-            onClick = onDismissRequest
+            onClick = onDismissRequest,
           ) {
             Icon(Icons.Default.Close, contentDescription = null)
           }

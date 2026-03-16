@@ -6,22 +6,17 @@ plugins {
   alias(libs.plugins.ksp)
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.dagger.hilt.android)
-  alias(libs.plugins.ktfmt)
   alias(libs.plugins.wire)
 }
 
 kotlin {
-    compilerOptions {
-        languageVersion = KotlinVersion.KOTLIN_2_0
-        jvmTarget = JvmTarget.JVM_17
-    }
+  compilerOptions {
+    languageVersion = KotlinVersion.KOTLIN_2_0
+    jvmTarget = JvmTarget.JVM_17
+  }
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
+java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
 
 android {
   compileSdk = 36
@@ -52,8 +47,6 @@ android {
   packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
   namespace = "com.kainalu.wordle"
 }
-
-ktfmt { googleStyle() }
 
 ksp {
   arg("room.schemaLocation", "$projectDir/schemas")
@@ -99,6 +92,4 @@ dependencies {
   debugImplementation(libs.androidx.compose.ui.tooling.asProvider())
 }
 
-wire {
-  kotlin {}
-}
+wire { kotlin {} }

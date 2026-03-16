@@ -19,6 +19,18 @@ plugins {
   alias(libs.plugins.ksp) apply false
   alias(libs.plugins.compose.compiler) apply false
   alias(libs.plugins.dagger.hilt.android) apply false
+  alias(libs.plugins.spotless)
 }
 
-tasks.register("clean") { delete(rootProject.layout.buildDirectory) }
+configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+  kotlin {
+    target("*/**/*.kt")
+    ktfmt().googleStyle()
+  }
+  kotlinGradle {
+    target("*.kts", "*/**/*.kts")
+    ktfmt().googleStyle()
+  }
+}
+
+tasks.named("spotlessKotlinGradle") { dependsOn("spotlessKotlin") }

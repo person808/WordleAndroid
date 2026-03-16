@@ -85,7 +85,7 @@ val MaterialTheme.guessColorsPalette: GuessColorsPalette
 fun WordleTheme(
   useDarkTheme: Boolean = isSystemInDarkTheme(),
   useDynamicColors: Boolean = true,
-  content: @Composable () -> Unit
+  content: @Composable () -> Unit,
 ) {
   val colorScheme =
     when {
@@ -107,7 +107,7 @@ fun WordleTheme(
 
     CompositionLocalProvider(
       LocalGuessColorsPalette provides customColorsPalette,
-      content = content
+      content = content,
     )
   }
 }

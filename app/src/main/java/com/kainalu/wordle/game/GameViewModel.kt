@@ -26,7 +26,6 @@ constructor(
   private val wordsRepository: WordsRepository,
   private val gameSettings: GameSettings,
 ) : ViewModel() {
-
   private val _gameState = MutableStateFlow<GameState>(GameState.Loading)
   val gameState: StateFlow<GameState> = _gameState
 
@@ -41,7 +40,7 @@ constructor(
           GameState.Active(
             answer = wordsRepository.getAnswer(date.toEpochDay()),
             maxGuesses = gameSettings.maxGuesses,
-            date = date
+            date = date,
           )
         Timber.d("Loaded game: $newState")
         newState
@@ -104,12 +103,16 @@ constructor(
                 // character if needed
                 (guess as SubmittedGuess).forEach { result ->
                   when (result) {
-                    is GuessResult.Correct -> set(result.letter, result)
+                    is GuessResult.Correct -> {
+                      set(result.letter, result)
+                    }
+
                     is GuessResult.PartialMatch -> {
                       if (guessResults[result.letter] !is GuessResult.Correct) {
                         set(result.letter, result)
                       }
                     }
+
                     is GuessResult.Incorrect -> {
                       if (guessResults[result.letter] == null) {
                         set(result.letter, result)
@@ -143,7 +146,7 @@ constructor(
               guesses = newGuesses,
               maxGuesses = maxGuesses,
               guessResults = newGuessResults,
-              date = date
+              date = date,
             )
           } ?: state.copy(guesses = newGuesses, guessResults = newGuessResults)
       }
@@ -222,14 +225,13 @@ constructor(
    */
   private suspend fun updateLastGuess(
     guesses: List<Guess>,
-    transform: suspend (UnsubmittedGuess) -> Guess
-  ): List<Guess> {
-    return guesses.mapIndexed { index, guess ->
+    transform: suspend (UnsubmittedGuess) -> Guess,
+  ): List<Guess> =
+    guesses.mapIndexed { index, guess ->
       if (index + 1 == guesses.size && guess is UnsubmittedGuess) {
         transform(guess)
       } else {
         guess
       }
     }
-  }
 }

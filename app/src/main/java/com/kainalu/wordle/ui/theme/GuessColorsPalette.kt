@@ -11,7 +11,7 @@ data class GuessColorsPalette(
   val correctGuessBackground: Color = Color.Unspecified,
   val partialMatchBackground: Color = Color.Unspecified,
   val incorrectGuessBackground: Color = Color.Unspecified,
-  val guessText: Color = Color.Unspecified
+  val guessText: Color = Color.Unspecified,
 ) {
   companion object {
     fun createDarkPalette(
@@ -28,7 +28,7 @@ data class GuessColorsPalette(
         correctGuessBackground = darkCorrectGuessBackground,
         partialMatchBackground = darkPartialMatchBackground,
         incorrectGuessBackground = incorrectGuessBackground,
-        guessText = darkGuessText
+        guessText = darkGuessText,
       )
     }
 
@@ -46,7 +46,7 @@ data class GuessColorsPalette(
         correctGuessBackground = lightCorrectGuessBackground,
         partialMatchBackground = lightPartialMatchBackground,
         incorrectGuessBackground = incorrectGuessBackground,
-        guessText = lightGuessText
+        guessText = lightGuessText,
       )
     }
   }

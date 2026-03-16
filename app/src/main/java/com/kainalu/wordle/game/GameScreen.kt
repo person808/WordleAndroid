@@ -45,7 +45,7 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltVie
   Column(
     modifier = modifier.fillMaxSize(),
     horizontalAlignment = Alignment.CenterHorizontally,
-    verticalArrangement = Arrangement.SpaceEvenly
+    verticalArrangement = Arrangement.SpaceEvenly,
   ) {
     // Need to rebind state to let compiler smart cast state type
     state.let { state ->
@@ -54,7 +54,7 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltVie
           modifier = Modifier.padding(16.dp),
           guesses = state.guesses,
           maxGuesses = state.maxGuesses,
-          wordSize = state.answer.length
+          wordSize = state.answer.length,
         )
         Keyboard(modifier = Modifier.padding(16.dp), guessResults = state.guessResults) { key ->
           when (key) {
@@ -69,12 +69,7 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltVie
 }
 
 @Composable
-fun GameBoard(
-  modifier: Modifier = Modifier,
-  guesses: List<Guess>,
-  maxGuesses: Int,
-  wordSize: Int,
-) {
+fun GameBoard(modifier: Modifier = Modifier, guesses: List<Guess>, maxGuesses: Int, wordSize: Int) {
   Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
     guesses.forEach { guess ->
       Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {

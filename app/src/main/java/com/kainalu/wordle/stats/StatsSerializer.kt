@@ -10,11 +10,10 @@ import java.io.OutputStream
 object StatsSerializer : Serializer<Stats> {
   override val defaultValue: Stats = Stats()
 
-  override suspend fun readFrom(input: InputStream): Stats {
-      return Stats.ADAPTER.decode(input)
-  }
+  override suspend fun readFrom(input: InputStream): Stats = Stats.ADAPTER.decode(input)
 
-  override suspend fun writeTo(t: Stats, output: OutputStream) = Stats.ADAPTER.encode(stream = output, value = t)
+  override suspend fun writeTo(t: Stats, output: OutputStream) =
+    Stats.ADAPTER.encode(stream = output, value = t)
 }
 
 val Context.statsDataStore: DataStore<Stats> by
