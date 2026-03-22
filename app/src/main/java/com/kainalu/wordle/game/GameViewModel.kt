@@ -7,9 +7,6 @@ import com.kainalu.wordle.settings.GameSettings
 import com.kainalu.wordle.stats.GameResult
 import com.kainalu.wordle.stats.ResultsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.Clock
-import java.time.LocalDate
-import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +15,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.Clock
+import java.time.LocalDate
+import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel
@@ -51,104 +51,100 @@ constructor(
   }
 
   fun guessLetter(letter: Char) {
-    viewModelScope.launch {
-      _gameState.update { state ->
-        if (state !is GameState.Active) {
-          return@update state
-        }
+    _gameState.update { state ->
+      if (state !is GameState.Active) {
+        return@update state
+      }
 
-        val (answer, guesses) = state
-        if (guesses.lastOrNull() !is UnsubmittedGuess) {
-          // We need to create a new guess to fill
-          state.copy(
-            guesses =
-              buildList {
-                addAll(guesses)
-                add(UnsubmittedGuess(answer.length, letter.toString().lowercase()))
-              }
-          )
-        } else {
-          state.copy(guesses = updateLastGuess(guesses) { guess -> guess.insert(letter) })
-        }
+      val (answer, guesses) = state
+      if (guesses.lastOrNull() !is UnsubmittedGuess) {
+        // We need to create a new guess to fill
+        state.copy(
+          guesses =
+            buildList {
+              addAll(guesses)
+              add(UnsubmittedGuess(answer.length, letter.toString().lowercase()))
+            }
+        )
+      } else {
+        state.copy(guesses = updateLastGuess(guesses) { guess -> guess.insert(letter) })
       }
     }
   }
 
   fun deleteLetter() {
-    viewModelScope.launch {
-      _gameState.update { state ->
-        if (state !is GameState.Active) {
-          return@update state
-        }
-
-        state.copy(guesses = updateLastGuess(state.guesses) { guess -> guess.delete() })
+    _gameState.update { state ->
+      if (state !is GameState.Active) {
+        return@update state
       }
+
+      state.copy(guesses = updateLastGuess(state.guesses) { guess -> guess.delete() })
     }
   }
 
   fun submitAnswer() {
-    viewModelScope.launch {
-      _gameState.update { state ->
-        if (state !is GameState.Active) {
-          return@update state
-        }
+    _gameState.update { state ->
+      if (state !is GameState.Active) {
+        return@update state
+      }
 
-        val (answer, guesses, maxGuesses, guessResults, date) = state
-        val newGuesses = updateLastGuess(guesses) { guess -> checkGuess(guess, answer) }
-        val newGuessResults =
-          newGuesses
-            .lastOrNull { it is SubmittedGuess }
-            ?.let { guess ->
-              guessResults.toMutableMap().apply {
-                // Loop over results of the submitted guess and update the best result
-                // per
-                // character if needed
-                (guess as SubmittedGuess).forEach { result ->
-                  when (result) {
-                    is GuessResult.Correct -> {
+      val (answer, guesses, maxGuesses, guessResults, date) = state
+      val newGuesses = updateLastGuess(guesses) { guess -> checkGuess(guess, answer) }
+      val newGuessResults =
+        newGuesses
+          .lastOrNull { it is SubmittedGuess }
+          ?.let { guess ->
+            guessResults.toMutableMap().apply {
+              // Loop over results of the submitted guess and update the best result
+              // per
+              // character if needed
+              (guess as SubmittedGuess).forEach { result ->
+                when (result) {
+                  is GuessResult.Correct -> {
+                    set(result.letter, result)
+                  }
+
+                  is GuessResult.PartialMatch -> {
+                    if (guessResults[result.letter] !is GuessResult.Correct) {
                       set(result.letter, result)
                     }
+                  }
 
-                    is GuessResult.PartialMatch -> {
-                      if (guessResults[result.letter] !is GuessResult.Correct) {
-                        set(result.letter, result)
-                      }
-                    }
-
-                    is GuessResult.Incorrect -> {
-                      if (guessResults[result.letter] == null) {
-                        set(result.letter, result)
-                      }
+                  is GuessResult.Incorrect -> {
+                    if (guessResults[result.letter] == null) {
+                      set(result.letter, result)
                     }
                   }
                 }
               }
-            } ?: guessResults
+            }
+          } ?: guessResults
 
-        // Get final submitted guess and process it if the game is over
-        newGuesses
-          .lastOrNull { it is SubmittedGuess && it.isCorrect() }
-          ?.let { guess ->
-            val won = (guess as SubmittedGuess).all { it is GuessResult.Correct }
+      // Get final submitted guess and process it if the game is over
+      newGuesses
+        .lastOrNull { it is SubmittedGuess && it.isCorrect() }
+        ?.let { guess ->
+          val won = (guess as SubmittedGuess).all { it is GuessResult.Correct }
 
+          viewModelScope.launch {
             resultsRepository.saveGameResult(
               GameResult(date = LocalDate.now(), numGuesses = newGuesses.size, won = won)
             )
             Timber.d("Stats: ${resultsRepository.getStats()}")
+          }
 
-            val event = Event.GameFinished(answer = answer, won = won)
-            Timber.d("Game finished: $event")
-            _gameEvents.send(event)
+          val event = Event.GameFinished(answer = answer, won = won)
+          Timber.d("Game finished: $event")
+          viewModelScope.launch { _gameEvents.send(event) }
 
-            GameState.Finished(
-              answer = answer,
-              guesses = newGuesses,
-              maxGuesses = maxGuesses,
-              guessResults = newGuessResults,
-              date = date,
-            )
-          } ?: state.copy(guesses = newGuesses, guessResults = newGuessResults)
-      }
+          GameState.Finished(
+            answer = answer,
+            guesses = newGuesses,
+            maxGuesses = maxGuesses,
+            guessResults = newGuessResults,
+            date = date,
+          )
+        } ?: state.copy(guesses = newGuesses, guessResults = newGuessResults)
     }
   }
 
@@ -160,14 +156,14 @@ constructor(
    * @return A [SubmittedGuess] if [guess] is able to be checked, otherwise return the original
    *   [guess]
    */
-  private suspend fun checkGuess(guess: UnsubmittedGuess, answer: String): Guess {
+  private fun checkGuess(guess: UnsubmittedGuess, answer: String): Guess {
     if (!guess.isFull()) {
-      _gameEvents.send(Event.GuessTooShort)
+      viewModelScope.launch { _gameEvents.send(Event.GuessTooShort) }
       return guess
     }
 
     if (!wordsRepository.isValidGuess(guess.joinToString(separator = ""))) {
-      _gameEvents.send(Event.GuessNotInWordList)
+      viewModelScope.launch { _gameEvents.send(Event.GuessNotInWordList) }
       return guess
     }
 
@@ -222,9 +218,9 @@ constructor(
    * @param transform The function to call to get the updated guess value. Only invoked if the last
    *   guess is an [UnsubmittedGuess]
    */
-  private suspend fun updateLastGuess(
+  private fun updateLastGuess(
     guesses: List<Guess>,
-    transform: suspend (UnsubmittedGuess) -> Guess,
+    transform: (UnsubmittedGuess) -> Guess,
   ): List<Guess> =
     guesses.mapIndexed { index, guess ->
       if (index + 1 == guesses.size && guess is UnsubmittedGuess) {
