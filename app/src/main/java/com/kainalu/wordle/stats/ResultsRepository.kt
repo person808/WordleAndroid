@@ -1,19 +1,18 @@
 package com.kainalu.wordle.stats
 
 import androidx.datastore.core.DataStore
+import kotlinx.coroutines.flow.first
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
-import kotlinx.coroutines.flow.first
 
 class ResultsRepository @Inject constructor(private val statsDataStore: DataStore<Stats>) {
   suspend fun saveGameResult(result: GameResult) {
     statsDataStore.updateData { stats ->
       // Skip update if we've already saved the result for the current day
-      if (
-        stats.last_completed_game_date != Date() &&
-          stats.last_completed_game_date?.toLocalDate() == LocalDate.now()
-      ) {
+      if (stats.last_completed_game_date?.toLocalDate() == result.date) {
+        Timber.w("Skipping stats update, already saved result for today")
         return@updateData stats
       }
 
@@ -31,8 +30,12 @@ class ResultsRepository @Inject constructor(private val statsDataStore: DataStor
           if (newWinStreak > stats.longest_win_streak) newWinStreak else stats.longest_win_streak,
         games_played = stats.games_played + 1,
         guess_distribution =
-          stats.guess_distribution.toMutableMap().apply {
-            put(result.numGuesses, getOrDefault(result.numGuesses, 0) + 1)
+          if (result.won) {
+            stats.guess_distribution.toMutableMap().apply {
+              put(result.numGuesses, getOrDefault(result.numGuesses, 0) + 1)
+            }
+          } else {
+            stats.guess_distribution
           },
       )
     }
@@ -44,7 +47,7 @@ class ResultsRepository @Inject constructor(private val statsDataStore: DataStor
     val playedPreviousDay =
       stats.last_completed_game_date != null &&
         stats.last_completed_game_date != Date() &&
-        ChronoUnit.DAYS.between(stats.last_completed_game_date.toLocalDate(), result.date) > 1L
+        ChronoUnit.DAYS.between(stats.last_completed_game_date.toLocalDate(), result.date) >= 1L
     return when {
       // Check if we have a winstreak to extend from the previous day
       result.won && playedPreviousDay -> {

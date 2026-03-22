@@ -86,9 +86,11 @@ dependencies {
   implementation(libs.timber)
 
   testImplementation(libs.junit)
+  testImplementation(libs.kotlin.coroutines.test)
   androidTestImplementation(libs.androidx.test.junit)
   androidTestImplementation(libs.androidx.test.espresso.core)
   androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+  androidTestImplementation(libs.androidx.junit.ktx)
   debugImplementation(libs.androidx.compose.ui.tooling.asProvider())
 }
 
