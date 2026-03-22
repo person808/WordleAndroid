@@ -26,7 +26,6 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import timber.log.Timber
 
 @RunWith(JUnitParamsRunner::class)
 class GameViewModelTest {
@@ -171,7 +170,6 @@ class GameViewModelTest {
     launch {
         repeat(gameSettings.maxGuesses) {
           guess.forEach { viewModel.guessLetter(it) }
-          Timber.i("Submitting")
           viewModel.submitAnswer()
         }
       }
