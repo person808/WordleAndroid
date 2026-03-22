@@ -2,11 +2,11 @@ package com.kainalu.wordle.game.words
 
 import com.kainalu.wordle.persistence.ValidAnswersDao
 import com.kainalu.wordle.persistence.ValidGuessesDao
+import javax.inject.Inject
+import kotlin.random.Random
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import javax.inject.Inject
-import kotlin.random.Random
 
 class WordsRepository
 @Inject

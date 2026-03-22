@@ -7,6 +7,10 @@ import com.kainalu.wordle.settings.GameSettings
 import com.kainalu.wordle.stats.GameResult
 import com.kainalu.wordle.stats.ResultsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.Clock
+import java.time.LocalDate
+import java.util.Locale
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,9 +19,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.Clock
-import java.time.LocalDate
-import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel
@@ -40,7 +41,7 @@ constructor(
         val date = LocalDate.now(clock)
         val newState =
           GameState.Active(
-            answer = wordsRepository.getAnswer(date.toEpochDay()),
+            answer = wordsRepository.getAnswer(date.toEpochDay()).lowercase(Locale.US),
             maxGuesses = gameSettings.maxGuesses,
             date = date,
           )
@@ -96,8 +97,7 @@ constructor(
           ?.let { guess ->
             guessResults.toMutableMap().apply {
               // Loop over results of the submitted guess and update the best result
-              // per
-              // character if needed
+              // per character if needed
               (guess as SubmittedGuess).forEach { result ->
                 when (result) {
                   is GuessResult.Correct -> {
@@ -122,13 +122,12 @@ constructor(
 
       // Get final submitted guess and process it if the game is over
       newGuesses
-        .lastOrNull { it is SubmittedGuess && it.isCorrect() }
-        ?.let { guess ->
-          val won = (guess as SubmittedGuess).all { it is GuessResult.Correct }
-
+        .lastOrNull { it is SubmittedGuess && (it.isCorrect() || newGuesses.size == maxGuesses) }
+        ?.let {
+          val won = (it as SubmittedGuess).isCorrect()
           viewModelScope.launch {
             resultsRepository.saveGameResult(
-              GameResult(date = LocalDate.now(), numGuesses = newGuesses.size, won = won)
+              GameResult(date = state.date, numGuesses = newGuesses.size, won = won)
             )
             Timber.d("Stats: ${resultsRepository.getStats()}")
           }
