@@ -10,6 +10,10 @@ class WordsRepository
 constructor(private val answersDao: ValidAnswersDao, private val guessesDao: ValidGuessesDao) {
   suspend fun getAnswer(seed: Long): String = answersDao.getAll().random(Random(seed)).value
 
-  suspend fun getValidGuessesSet(): Set<String> =
-    guessesDao.getAll().map { it.value }.toSet() + answersDao.getAll().map { it.value }
+  suspend fun isValidGuess(guess: String): Boolean {
+    // TODO: Cache this
+    val validGuesses =
+      guessesDao.getAll().map { it.value }.toSet() + answersDao.getAll().map { it.value }.toSet()
+    return validGuesses.contains(guess)
+  }
 }

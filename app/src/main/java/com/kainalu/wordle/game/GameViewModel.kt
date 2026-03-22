@@ -7,6 +7,7 @@ import com.kainalu.wordle.settings.GameSettings
 import com.kainalu.wordle.stats.GameResult
 import com.kainalu.wordle.stats.ResultsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.Clock
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
@@ -25,6 +26,7 @@ constructor(
   private val resultsRepository: ResultsRepository,
   private val wordsRepository: WordsRepository,
   private val gameSettings: GameSettings,
+  private val clock: Clock,
 ) : ViewModel() {
   private val _gameState = MutableStateFlow<GameState>(GameState.Loading)
   val gameState: StateFlow<GameState> = _gameState
@@ -35,7 +37,7 @@ constructor(
   init {
     viewModelScope.launch {
       _gameState.update {
-        val date = LocalDate.now()
+        val date = LocalDate.now(clock)
         val newState =
           GameState.Active(
             answer = wordsRepository.getAnswer(date.toEpochDay()),
@@ -125,10 +127,7 @@ constructor(
 
         // Get final submitted guess and process it if the game is over
         newGuesses
-          .lastOrNull {
-            it is SubmittedGuess &&
-              (it.all { result -> result is GuessResult.Correct } || newGuesses.size == maxGuesses)
-          }
+          .lastOrNull { it is SubmittedGuess && it.isCorrect() }
           ?.let { guess ->
             val won = (guess as SubmittedGuess).all { it is GuessResult.Correct }
 
@@ -167,7 +166,7 @@ constructor(
       return guess
     }
 
-    if (!wordsRepository.getValidGuessesSet().contains(guess.joinToString(separator = ""))) {
+    if (!wordsRepository.isValidGuess(guess.joinToString(separator = ""))) {
       _gameEvents.send(Event.GuessNotInWordList)
       return guess
     }

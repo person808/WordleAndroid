@@ -42,4 +42,8 @@ data class UnsubmittedGuess(private val maxSize: Int, private val value: String 
 }
 
 data class SubmittedGuess(private val guessResults: List<GuessResult> = listOf()) :
-  Guess(), Iterable<GuessResult> by guessResults
+  Guess(), Iterable<GuessResult> by guessResults {
+  fun isCorrect(): Boolean {
+    return guessResults.all { it is GuessResult.Correct }
+  }
+}
