@@ -25,7 +25,12 @@ constructor(
       _screenState.value =
         StatsScreenState.Loaded(
           gamesPlayed = stats.games_played,
-          winRate = stats.wins.toDouble() / stats.games_played * 100,
+          winRate =
+            if (stats.games_played == 0) {
+              0.0
+            } else {
+              stats.wins.toDouble() / stats.games_played * 100
+            },
           currentWinStreak = stats.current_win_streak,
           maxWinStreak = stats.longest_win_streak,
           gameDistribution =
