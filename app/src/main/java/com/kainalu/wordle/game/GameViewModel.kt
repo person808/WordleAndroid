@@ -91,59 +91,60 @@ constructor(
 
       val (answer, guesses, maxGuesses, guessResults, date) = state
       val newGuesses = updateLastGuess(guesses) { guess -> checkGuess(guess, answer) }
+      val lastGuess = newGuesses.lastOrNull { it is SubmittedGuess } as SubmittedGuess?
       val newGuessResults =
-        newGuesses
-          .lastOrNull { it is SubmittedGuess }
-          ?.let { guess ->
-            guessResults.toMutableMap().apply {
-              // Loop over results of the submitted guess and update the best result
-              // per character if needed
-              (guess as SubmittedGuess).forEach { result ->
-                when (result) {
-                  is GuessResult.Correct -> {
-                    set(result.letter, result)
-                  }
+        guessResults.toMutableMap().apply {
+          if (lastGuess == null) {
+            return@apply
+          }
 
-                  is GuessResult.PartialMatch -> {
-                    if (guessResults[result.letter] !is GuessResult.Correct) {
-                      set(result.letter, result)
-                    }
-                  }
+          // Loop over results of the submitted guess and update the best result
+          // per character if needed
+          lastGuess.forEach { result ->
+            when (result) {
+              is GuessResult.Correct -> {
+                set(result.letter, result)
+              }
 
-                  is GuessResult.Incorrect -> {
-                    if (guessResults[result.letter] == null) {
-                      set(result.letter, result)
-                    }
-                  }
+              is GuessResult.PartialMatch -> {
+                if (guessResults[result.letter] !is GuessResult.Correct) {
+                  set(result.letter, result)
+                }
+              }
+
+              is GuessResult.Incorrect -> {
+                if (guessResults[result.letter] == null) {
+                  set(result.letter, result)
                 }
               }
             }
-          } ?: guessResults
+          }
+        }
 
       // Get final submitted guess and process it if the game is over
-      newGuesses
-        .lastOrNull { it is SubmittedGuess && (it.isCorrect() || newGuesses.size == maxGuesses) }
-        ?.let {
-          val won = (it as SubmittedGuess).isCorrect()
-          viewModelScope.launch {
-            resultsRepository.saveGameResult(
-              GameResult(date = state.date, numGuesses = newGuesses.size, won = won)
-            )
-            Timber.d("Stats: ${resultsRepository.getStats()}")
-          }
-
-          val event = Event.GameFinished(answer = answer, won = won)
-          Timber.d("Game finished: $event")
-          viewModelScope.launch { _gameEvents.send(event) }
-
-          GameState.Finished(
-            answer = answer,
-            guesses = newGuesses,
-            maxGuesses = maxGuesses,
-            guessResults = newGuessResults,
-            date = date,
+      val won = lastGuess?.isCorrect() == true
+      return@update if (won || newGuesses.size == maxGuesses) {
+        viewModelScope.launch {
+          resultsRepository.saveGameResult(
+            GameResult(date = state.date, numGuesses = newGuesses.size, won = won)
           )
-        } ?: state.copy(guesses = newGuesses, guessResults = newGuessResults)
+          Timber.d("Stats: ${resultsRepository.getStats()}")
+        }
+
+        val event = Event.GameFinished(answer = answer, won = won)
+        Timber.d("Game finished: $event")
+        viewModelScope.launch { _gameEvents.send(event) }
+
+        GameState.Finished(
+          answer = answer,
+          guesses = newGuesses,
+          maxGuesses = maxGuesses,
+          guessResults = newGuessResults,
+          date = date,
+        )
+      } else {
+        state.copy(guesses = newGuesses, guessResults = newGuessResults)
+      }
     }
   }
 
