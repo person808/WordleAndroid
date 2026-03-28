@@ -1,16 +1,19 @@
 package com.kainalu.wordle.game
 
+import com.kainalu.wordle.settings.GameSettings
 import java.time.LocalDate
 
-interface GameData {
+sealed interface GameState {
+  /** Settings for the game */
+  val settings: GameSettings
+}
+
+sealed interface GameData : GameState {
   /** The answer to the game */
   val answer: String
 
   /** The guesses the player has made */
   val guesses: List<Guess>
-
-  /** @see [com.kainalu.wordle.settings.GameSettings.maxGuesses] */
-  val maxGuesses: Int
 
   /** A map of guessed characters to the best [GuessResult] result for that letter */
   val guessResults: Map<Char, GuessResult>
@@ -19,22 +22,20 @@ interface GameData {
   val date: LocalDate
 }
 
-sealed class GameState {
-  data object Loading : GameState()
+data class Loading(override val settings: GameSettings) : GameState
 
-  data class Active(
-    override val answer: String,
-    override val guesses: List<Guess> = emptyList(),
-    override val maxGuesses: Int,
-    override val guessResults: Map<Char, GuessResult> = emptyMap(),
-    override val date: LocalDate,
-  ) : GameState(), GameData
+data class Active(
+  override val settings: GameSettings,
+  override val answer: String,
+  override val guesses: List<Guess> = emptyList(),
+  override val guessResults: Map<Char, GuessResult> = emptyMap(),
+  override val date: LocalDate,
+) : GameData
 
-  data class Finished(
-    override val answer: String,
-    override val guesses: List<Guess> = emptyList(),
-    override val maxGuesses: Int,
-    override val guessResults: Map<Char, GuessResult> = emptyMap(),
-    override val date: LocalDate,
-  ) : GameState(), GameData
-}
+data class Finished(
+  override val settings: GameSettings,
+  override val answer: String,
+  override val guesses: List<Guess> = emptyList(),
+  override val guessResults: Map<Char, GuessResult> = emptyMap(),
+  override val date: LocalDate,
+) : GameData
