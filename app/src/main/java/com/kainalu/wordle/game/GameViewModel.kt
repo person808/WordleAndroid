@@ -29,7 +29,7 @@ constructor(
   private val gameSettings: GameSettings,
   private val clock: Clock,
 ) : ViewModel() {
-  private val _gameState = MutableStateFlow<GameState>(GameState.Loading)
+  private val _gameState = MutableStateFlow<GameState>(Loading(gameSettings))
   val gameState: StateFlow<GameState> = _gameState
 
   private val _gameEvents = Channel<Event>(UNLIMITED)
@@ -40,9 +40,9 @@ constructor(
       _gameState.update {
         val date = LocalDate.now(clock)
         val newState =
-          GameState.Active(
+          Active(
+            settings = gameSettings,
             answer = wordsRepository.getAnswer(date.toEpochDay()).lowercase(Locale.US),
-            maxGuesses = gameSettings.maxGuesses,
             date = date,
           )
         Timber.d("Loaded game: $newState")
@@ -53,11 +53,11 @@ constructor(
 
   fun guessLetter(letter: Char) {
     _gameState.update { state ->
-      if (state !is GameState.Active) {
+      if (state !is Active) {
         return@update state
       }
 
-      val (answer, guesses) = state
+      val (_, answer, guesses) = state
       if (guesses.lastOrNull() !is UnsubmittedGuess) {
         // We need to create a new guess to fill
         state.copy(
@@ -75,7 +75,7 @@ constructor(
 
   fun deleteLetter() {
     _gameState.update { state ->
-      if (state !is GameState.Active) {
+      if (state !is Active) {
         return@update state
       }
 
@@ -85,11 +85,11 @@ constructor(
 
   fun submitAnswer() {
     _gameState.update { state ->
-      if (state !is GameState.Active) {
+      if (state !is Active) {
         return@update state
       }
 
-      val (answer, guesses, maxGuesses, guessResults, date) = state
+      val (_, answer, guesses, guessResults, date) = state
       val newGuesses = updateLastGuess(guesses) { guess -> checkGuess(guess, answer) }
       val lastGuess = newGuesses.lastOrNull { it is SubmittedGuess } as SubmittedGuess?
       val newGuessResults =
@@ -123,7 +123,7 @@ constructor(
 
       // Get final submitted guess and process it if the game is over
       val won = lastGuess?.isCorrect() == true
-      return@update if (won || newGuesses.size == maxGuesses) {
+      return@update if (won || newGuesses.size == gameSettings.maxGuesses) {
         viewModelScope.launch {
           resultsRepository.saveGameResult(
             GameResult(date = state.date, numGuesses = newGuesses.size, won = won)
@@ -135,10 +135,10 @@ constructor(
         Timber.d("Game finished: $event")
         viewModelScope.launch { _gameEvents.send(event) }
 
-        GameState.Finished(
+        Finished(
+          settings = state.settings,
           answer = answer,
           guesses = newGuesses,
-          maxGuesses = maxGuesses,
           guessResults = newGuessResults,
           date = date,
         )

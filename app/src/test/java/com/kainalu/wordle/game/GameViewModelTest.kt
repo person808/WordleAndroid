@@ -54,7 +54,7 @@ class GameViewModelTest {
   fun `initializes game state`() = runTest {
     val gameState = viewModel.gameState.value
     assertEquals(
-      GameState.Active(answer = "hello", maxGuesses = 6, date = LocalDate.now(clock)),
+      Active(settings = gameSettings, answer = "hello", date = LocalDate.now(clock)),
       gameState,
     )
   }
@@ -62,39 +62,30 @@ class GameViewModelTest {
   @Test
   fun `guessLetter adds letter to last guess`() = runTest {
     "abcde".forEach { viewModel.guessLetter(it) }
-    assertEquals(
-      UnsubmittedGuess(5, "abcde"),
-      (viewModel.gameState.value as GameState.Active).guesses.last(),
-    )
+    assertEquals(UnsubmittedGuess(5, "abcde"), (viewModel.gameState.value as Active).guesses.last())
 
     // Check that submission moves to next guess
     viewModel.submitAnswer()
     "fghij".forEach { viewModel.guessLetter(it) }
-    assertEquals(
-      UnsubmittedGuess(5, "fghij"),
-      (viewModel.gameState.value as GameState.Active).guesses.last(),
-    )
+    assertEquals(UnsubmittedGuess(5, "fghij"), (viewModel.gameState.value as Active).guesses.last())
   }
 
   @Test
   fun `guessLetter does not add letters past max length`() = runTest {
     "abcdefg".forEach { viewModel.guessLetter(it) }
-    assertEquals(
-      UnsubmittedGuess(5, "abcde"),
-      (viewModel.gameState.value as GameState.Active).guesses.last(),
-    )
+    assertEquals(UnsubmittedGuess(5, "abcde"), (viewModel.gameState.value as Active).guesses.last())
   }
 
   @Test
   fun `guessLetter does not add letters if game is finished`() = runTest {
     TEST_ANSWER.forEach { viewModel.guessLetter(it) }
     viewModel.submitAnswer()
-    assertTrue(viewModel.gameState.value is GameState.Finished)
+    assertTrue(viewModel.gameState.value is Finished)
 
     viewModel.guessLetter('a')
     assertEquals(
       SubmittedGuess(TEST_ANSWER.map { GuessResult.Correct(it) }),
-      (viewModel.gameState.value as GameState.Finished).guesses.last(),
+      (viewModel.gameState.value as Finished).guesses.last(),
     )
   }
 
@@ -107,7 +98,7 @@ class GameViewModelTest {
       viewModel.deleteLetter()
       assertEquals(
         UnsubmittedGuess(5, guess.slice(0 until guess.length - i)),
-        (viewModel.gameState.value as GameState.Active).guesses.last(),
+        (viewModel.gameState.value as Active).guesses.last(),
       )
     }
   }
@@ -147,12 +138,12 @@ class GameViewModelTest {
     val event = viewModel.gameEvents.first()
     assertEquals(Event.GameFinished(answer = TEST_ANSWER, won = true), event)
     assertEquals(
-      GameState.Finished(
+      Finished(
+        settings = gameSettings,
         answer = TEST_ANSWER,
         guesses = listOf(SubmittedGuess(TEST_ANSWER.map { GuessResult.Correct(it) })),
         guessResults =
           buildMap { TEST_ANSWER.forEach { char -> put(char, GuessResult.Correct(char)) } },
-        maxGuesses = gameSettings.maxGuesses,
         date = LocalDate.now(clock),
       ),
       viewModel.gameState.value,
@@ -178,13 +169,13 @@ class GameViewModelTest {
     val event = viewModel.gameEvents.first()
     assertEquals(Event.GameFinished(answer = TEST_ANSWER, won = false), event)
     assertEquals(
-      GameState.Finished(
+      Finished(
+        settings = gameSettings,
         answer = TEST_ANSWER,
         guesses =
           List(gameSettings.maxGuesses) { SubmittedGuess(guess.map { GuessResult.Incorrect(it) }) },
         guessResults =
           buildMap { guess.forEach { char -> put(char, GuessResult.Incorrect(char)) } },
-        maxGuesses = gameSettings.maxGuesses,
         date = LocalDate.now(clock),
       ),
       viewModel.gameState.value,
@@ -232,7 +223,7 @@ class GameViewModelTest {
       guess.forEach { viewModel.guessLetter(it) }
       viewModel.submitAnswer()
 
-      assertEquals(expected, (viewModel.gameState.value as GameState.Active).guessResults)
+      assertEquals(expected, (viewModel.gameState.value as Active).guessResults)
     }
 
   @Test
@@ -257,7 +248,7 @@ class GameViewModelTest {
     guessSequence.forEach { (guess, expected) ->
       guess.forEach { viewModel.guessLetter(it) }
       viewModel.submitAnswer()
-      assertEquals(expected, (viewModel.gameState.value as GameState.Active).guessResults)
+      assertEquals(expected, (viewModel.gameState.value as Active).guessResults)
     }
   }
 }
