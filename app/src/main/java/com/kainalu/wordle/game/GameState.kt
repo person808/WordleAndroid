@@ -8,18 +8,22 @@ sealed interface GameState {
   val settings: GameSettings
 }
 
-sealed interface GameData : GameState {
+sealed class LoadedGame(guesses: List<Guess>) : GameState {
   /** The answer to the game */
-  val answer: String
-
+  abstract val answer: String
   /** The guesses the player has made */
-  val guesses: List<Guess>
-
+  abstract val guesses: List<Guess>
   /** A map of guessed characters to the best [GuessResult] result for that letter */
-  val guessResults: Map<Char, GuessResult>
-
+  abstract val guessResults: Map<Char, GuessResult>
   /** The date of the game */
-  val date: LocalDate
+  abstract val date: LocalDate
+  /** The current guess */
+  val currentGuessIndex: Int
+    get() = guesses.lastIndex
+
+  init {
+    require(guesses.isNotEmpty()) { "guesses list must not be empty" }
+  }
 }
 
 data class Loading(override val settings: GameSettings) : GameState
@@ -27,15 +31,15 @@ data class Loading(override val settings: GameSettings) : GameState
 data class Active(
   override val settings: GameSettings,
   override val answer: String,
-  override val guesses: List<Guess> = emptyList(),
+  override val guesses: List<Guess> = listOf(UnsubmittedGuess(answer.length)),
   override val guessResults: Map<Char, GuessResult> = emptyMap(),
   override val date: LocalDate,
-) : GameData
+) : LoadedGame(guesses)
 
 data class Finished(
   override val settings: GameSettings,
   override val answer: String,
-  override val guesses: List<Guess> = emptyList(),
+  override val guesses: List<Guess> = listOf(UnsubmittedGuess(answer.length)),
   override val guessResults: Map<Char, GuessResult> = emptyMap(),
   override val date: LocalDate,
-) : GameData
+) : LoadedGame(guesses)

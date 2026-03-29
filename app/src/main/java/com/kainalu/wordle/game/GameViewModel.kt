@@ -57,19 +57,7 @@ constructor(
         return@update state
       }
 
-      val (_, answer, guesses) = state
-      if (guesses.lastOrNull() !is UnsubmittedGuess) {
-        // We need to create a new guess to fill
-        state.copy(
-          guesses =
-            buildList {
-              addAll(guesses)
-              add(UnsubmittedGuess(answer.length, letter.toString().lowercase()))
-            }
-        )
-      } else {
-        state.copy(guesses = updateLastGuess(guesses) { guess -> guess.insert(letter) })
-      }
+      state.copy(guesses = updateLastGuess(state.guesses) { guess -> guess.insert(letter) })
     }
   }
 
@@ -91,38 +79,28 @@ constructor(
 
       val (_, answer, guesses, guessResults, date) = state
       val newGuesses = updateLastGuess(guesses) { guess -> checkGuess(guess, answer) }
-      val lastGuess = newGuesses.lastOrNull { it is SubmittedGuess } as SubmittedGuess?
-      val newGuessResults =
-        guessResults.toMutableMap().apply {
-          if (lastGuess == null) {
-            return@apply
-          }
+      val submittedGuess = newGuesses.lastOrNull() as? SubmittedGuess
 
-          // Loop over results of the submitted guess and update the best result
-          // per character if needed
-          lastGuess.forEach { result ->
-            when (result) {
-              is GuessResult.Correct -> {
-                set(result.letter, result)
-              }
-
-              is GuessResult.PartialMatch -> {
-                if (guessResults[result.letter] !is GuessResult.Correct) {
-                  set(result.letter, result)
-                }
-              }
-
-              is GuessResult.Incorrect -> {
-                if (guessResults[result.letter] == null) {
-                  set(result.letter, result)
-                }
-              }
-            }
+      // Calculate the new guess results
+      val newGuessResults = guessResults.toMutableMap()
+      val resultMergeComparator =
+        Comparator.comparingInt<GuessResult> {
+          when (it) {
+            is GuessResult.Incorrect -> 0
+            is GuessResult.PartialMatch -> 1
+            is GuessResult.Correct -> 2
           }
         }
+      submittedGuess?.forEach { guess ->
+        newGuessResults.merge(
+          guess.letter,
+          guess,
+          { old, new -> if (resultMergeComparator.compare(old, new) < 0) new else old },
+        )
+      }
 
       // Get final submitted guess and process it if the game is over
-      val won = lastGuess?.isCorrect() == true
+      val won = submittedGuess?.isCorrect() == true
       return@update if (won || newGuesses.size == gameSettings.maxGuesses) {
         viewModelScope.launch {
           resultsRepository.saveGameResult(
@@ -143,7 +121,16 @@ constructor(
           date = date,
         )
       } else {
-        state.copy(guesses = newGuesses, guessResults = newGuessResults)
+        state.copy(
+          guesses =
+            buildList {
+              addAll(newGuesses)
+              if (submittedGuess != null) {
+                add(UnsubmittedGuess(answer.length, ""))
+              }
+            },
+          guessResults = newGuessResults,
+        )
       }
     }
   }
