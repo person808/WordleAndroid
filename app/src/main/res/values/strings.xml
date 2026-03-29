@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Wordle</string>
+    <string name="guess_not_in_word_list">Not in word list</string>
+    <string name="guess_too_short">Not enough letters</string>
+    <string name="you_win">You win!</string>
 </resources>

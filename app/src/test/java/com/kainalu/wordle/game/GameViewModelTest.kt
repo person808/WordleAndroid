@@ -251,4 +251,36 @@ class GameViewModelTest {
       assertEquals(expected, (viewModel.gameState.value as Active).guessResults)
     }
   }
+
+  @Test
+  fun `submitAnswer adds new UnsubmittedGuess after incorrect SubmittedGuess`() = runTest {
+    val guess = "xxxxx"
+    guess.forEach { viewModel.guessLetter(it) }
+    viewModel.submitAnswer()
+
+    assertEquals(
+      listOf(
+        SubmittedGuess(guess.map { GuessResult.Incorrect(it) }),
+        UnsubmittedGuess(TEST_ANSWER.length),
+      ),
+      (viewModel.gameState.value as Active).guesses,
+    )
+  }
+
+  @Test
+  fun `submitAnswer does not add new UnsubmittedGuess if the guess cannot be submitted`() =
+    runTest {
+      val guess = "xxxxx"
+      guess.forEach { viewModel.guessLetter(it) }
+      viewModel.submitAnswer() // Should submit answer
+      viewModel.submitAnswer() // Attempt to submit blank guess
+
+      assertEquals(
+        listOf(
+          SubmittedGuess(guess.map { GuessResult.Incorrect(it) }),
+          UnsubmittedGuess(TEST_ANSWER.length, ""),
+        ),
+        (viewModel.gameState.value as Active).guesses,
+      )
+    }
 }
