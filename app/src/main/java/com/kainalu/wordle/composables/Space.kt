@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,37 +48,57 @@ fun EmptySpace() {
 }
 
 @Composable
-fun IncorrectSpace(letter: Char) {
-  SpaceBox(
-    modifier = Modifier.background(MaterialTheme.guessColorsPalette.incorrectGuessBackground)
-  ) {
-    SpaceLetter(letter = letter, color = MaterialTheme.guessColorsPalette.guessText)
+private fun SubmittedSpace(
+  modifier: Modifier = Modifier,
+  letter: Char,
+  showResult: Boolean,
+  resultBackground: Color,
+) {
+  if (showResult) {
+    SpaceBox(modifier = modifier.background(resultBackground)) {
+      SpaceLetter(letter = letter, color = MaterialTheme.guessColorsPalette.guessText)
+    }
+  } else {
+    GuessSpace(modifier = modifier, letter = letter)
   }
 }
 
 @Composable
-fun PartialMatchSpace(letter: Char) {
-  SpaceBox(
-    modifier = Modifier.background(MaterialTheme.guessColorsPalette.partialMatchBackground)
-  ) {
-    SpaceLetter(letter = letter, color = MaterialTheme.guessColorsPalette.guessText)
-  }
+fun IncorrectSpace(modifier: Modifier = Modifier, letter: Char, showResult: Boolean) {
+  SubmittedSpace(
+    modifier = modifier,
+    letter = letter,
+    showResult = showResult,
+    resultBackground = MaterialTheme.guessColorsPalette.incorrectGuessBackground,
+  )
 }
 
 @Composable
-fun CorrectSpace(letter: Char) {
-  SpaceBox(
-    modifier = Modifier.background(MaterialTheme.guessColorsPalette.correctGuessBackground)
-  ) {
-    SpaceLetter(letter = letter, color = MaterialTheme.guessColorsPalette.guessText)
-  }
+fun PartialMatchSpace(modifier: Modifier = Modifier, letter: Char, showResult: Boolean) {
+  SubmittedSpace(
+    modifier = modifier,
+    letter = letter,
+    showResult = showResult,
+    resultBackground = MaterialTheme.guessColorsPalette.partialMatchBackground,
+  )
 }
 
 @Composable
-fun GuessSpace(letter: Char) {
+fun CorrectSpace(modifier: Modifier = Modifier, letter: Char, showResult: Boolean) {
+  SubmittedSpace(
+    modifier = modifier,
+    letter = letter,
+    showResult = showResult,
+    resultBackground = MaterialTheme.guessColorsPalette.correctGuessBackground,
+  )
+}
+
+@Composable
+fun GuessSpace(modifier: Modifier = Modifier, letter: Char) {
   SpaceBox(
     modifier =
-      Modifier.background(MaterialTheme.colorScheme.surface)
+      modifier
+        .background(MaterialTheme.colorScheme.surface)
         .border(BORDER_WIDTH, MaterialTheme.colorScheme.outline)
   ) {
     SpaceLetter(letter = letter, color = MaterialTheme.colorScheme.onSurface)
@@ -86,23 +108,23 @@ fun GuessSpace(letter: Char) {
 @Preview
 @Composable
 fun IncorrectSpacePreview() {
-  MaterialTheme { IncorrectSpace('a') }
+  MaterialTheme { IncorrectSpace(letter = 'a', showResult = true) }
 }
 
 @Preview
 @Composable
 fun PartialMatchSpacePreview() {
-  MaterialTheme { PartialMatchSpace('a') }
+  MaterialTheme { PartialMatchSpace(letter = 'a', showResult = true) }
 }
 
 @Preview
 @Composable
 fun CorrectSpacePreview() {
-  MaterialTheme { CorrectSpace('a') }
+  MaterialTheme { CorrectSpace(letter = 'a', showResult = true) }
 }
 
 @Preview
 @Composable
 fun GuessSpacePreview() {
-  MaterialTheme { GuessSpace('a') }
+  MaterialTheme { GuessSpace(letter = 'a') }
 }
