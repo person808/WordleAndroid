@@ -5,7 +5,6 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -22,13 +21,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kainalu.wordle.LocalSnackbarHostState
 import com.kainalu.wordle.R
-import com.kainalu.wordle.composables.CorrectSpace
-import com.kainalu.wordle.composables.EmptySpace
-import com.kainalu.wordle.composables.GuessSpace
-import com.kainalu.wordle.composables.IncorrectSpace
+import com.kainalu.wordle.composables.GuessRow
 import com.kainalu.wordle.composables.Key
 import com.kainalu.wordle.composables.Keyboard
-import com.kainalu.wordle.composables.PartialMatchSpace
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -65,8 +60,11 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltVie
         is Event.GuessNotInWordList ->
           showGuessError(context.getString(R.string.guess_not_in_word_list))
         is Event.GuessTooShort -> showGuessError(context.getString(R.string.guess_too_short))
+        // FIXME: The "You win!" message shows before the reveal animation completes
         is Event.GameFinished ->
-          snackbarState.showSnackbar(if (event.won) "You win!" else event.answer.uppercase())
+          snackbarState.showSnackbar(
+            if (event.won) context.getString(R.string.you_win) else event.answer.uppercase()
+          )
       }
     }
   }
@@ -82,14 +80,11 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltVie
           GuessRow(
             modifier = Modifier.graphicsLayer { translationX = animatable.value },
             guess = guess,
-            wordSize = state.answer.length,
           )
         }
 
         // Pad board with empty guesses
-        repeat(state.settings.maxGuesses - state.guesses.size) {
-          GuessRow(guess = null, wordSize = state.answer.length)
-        }
+        repeat(state.settings.maxGuesses - state.guesses.size) { GuessRow(guess = null) }
       }
 
       Keyboard(modifier = Modifier.padding(16.dp), guessResults = state.guessResults) { key ->
@@ -97,33 +92,6 @@ fun GameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltVie
           is Key.Character -> viewModel.guessLetter(key.char)
           is Key.Delete -> viewModel.deleteLetter()
           is Key.Submit -> viewModel.submitAnswer()
-        }
-      }
-    }
-  }
-}
-
-@Composable
-fun GuessRow(modifier: Modifier = Modifier, guess: Guess?, wordSize: Int) {
-  Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-    when (guess) {
-      null -> {
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-          repeat(wordSize) { EmptySpace() }
-        }
-      }
-      is UnsubmittedGuess -> {
-        guess.forEach { letter -> GuessSpace(letter) }
-        // Pad guess row with empty spaces
-        repeat(wordSize - guess.length) { EmptySpace() }
-      }
-      is SubmittedGuess -> {
-        guess.forEach { letter ->
-          when (letter) {
-            is GuessResult.Correct -> CorrectSpace(letter.letter)
-            is GuessResult.PartialMatch -> PartialMatchSpace(letter.letter)
-            is GuessResult.Incorrect -> IncorrectSpace(letter.letter)
-          }
         }
       }
     }
