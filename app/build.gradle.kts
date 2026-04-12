@@ -11,7 +11,7 @@ plugins {
 
 kotlin {
   compilerOptions {
-    languageVersion = KotlinVersion.KOTLIN_2_0
+    languageVersion = KotlinVersion.KOTLIN_2_3
     jvmTarget = JvmTarget.JVM_17
   }
 }
