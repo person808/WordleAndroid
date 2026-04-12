@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -7,6 +8,7 @@ plugins {
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.dagger.hilt.android)
   alias(libs.plugins.wire)
+  jacoco
 }
 
 kotlin {
@@ -57,6 +59,56 @@ ksp {
   arg("room.generateKotlin", "true")
 }
 
+wire { kotlin {} }
+
+tasks.withType<Test> {
+  configure<JacocoTaskExtension> {
+    isIncludeNoLocationClasses = true
+    excludes = listOf("jdk.internal.*")
+  }
+}
+
+tasks.register<JacocoReport>("unitTestDebugCoverageReport") {
+  group = "Coverage"
+  dependsOn("testDebugUnitTest")
+
+  reports {
+    html.required = true
+    xml.required = true
+  }
+
+  // Execution data generated when running the tests against classes instrumented by the JaCoCo
+  // agent. This is enabled with 'enableUnitTestCoverage' in the 'debug' build type.
+  executionData.from(
+    layout.buildDirectory.dir(
+      "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+    )
+  )
+
+  val fileFilter = listOf("**/hilt_aggregated_deps/**")
+  val javaClasses =
+    fileTree(
+      layout.buildDirectory.dir("intermediates/javac/debug/compileDebugJavaWithJavac/classes")
+    ) {
+      exclude(fileFilter)
+    }
+  val kotlinClasses =
+    fileTree(
+      layout.buildDirectory.dir("intermediates/built_in_kotlinc/debug/compileDebugKotlin/classes")
+    ) {
+      exclude(fileFilter)
+    }
+
+  classDirectories.from(files(javaClasses, kotlinClasses))
+
+  // To produce an accurate report, the bytecode is mapped back to the original source code.
+  sourceDirectories.from(files("src/main/java", "src/main/kotlin"))
+}
+
+afterEvaluate {
+  tasks { getByName("testDebugUnitTest") { finalizedBy("unitTestDebugCoverageReport") } }
+}
+
 dependencies {
   coreLibraryDesugaring(libs.desugarJdkLibs)
 
@@ -99,5 +151,3 @@ dependencies {
   androidTestImplementation(libs.androidx.junit.ktx)
   debugImplementation(libs.androidx.compose.ui.tooling.asProvider())
 }
-
-wire { kotlin {} }
