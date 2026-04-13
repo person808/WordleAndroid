@@ -85,7 +85,22 @@ tasks.register<JacocoReport>("unitTestDebugCoverageReport") {
     )
   )
 
-  val fileFilter = listOf("**/hilt_aggregated_deps/**")
+  val fileFilter =
+    listOf(
+      "**/R.class",
+      "**/R$*.class",
+      "**/BuildConfig.*",
+      "**/Manifest*.*",
+      "**/*Test*.*",
+      "android/**/*.*",
+      "androidx/**/*.*",
+      "**/hilt_aggregated_deps/**",
+      "**/dagger/hilt/internal/*.*",
+      "**/*_HiltComponents*.*",
+      "**/*_Factory.*",
+      "**/*_MembersInjector.*",
+      "**/composables/*$*.class",
+    )
   val javaClasses =
     fileTree(
       layout.buildDirectory.dir("intermediates/javac/debug/compileDebugJavaWithJavac/classes")

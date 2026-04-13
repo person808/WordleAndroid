@@ -11,9 +11,21 @@ jobs:
         with: {distribution: 'temurin', java-version: '17'}
       - uses: gradle/actions/setup-gradle@v5
       - run: chmod +x gradlew
-      - run: ./gradlew testDebugUnitTest
+      - run: ./gradlew unitTestDebugCoverageReport
+      - name: Add coverage report to PR
+        uses: madrapps/jacoco-report@v1.7.1
+        if: github.event_name == 'pull_request'
+        with:
+          paths: ${{ github.workspace }}/app/build/reports/jacoco/unitTestDebugCoverageReport/unitTestDebugCoverageReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
       - run: ./gradlew assembleDebug
       - run: ./gradlew assembleRelease
+      - uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: app/build/reports/jacoco/unitTestDebugCoverageReport/html
       - uses: actions/upload-artifact@v7
         with:
           name: debug-apk
